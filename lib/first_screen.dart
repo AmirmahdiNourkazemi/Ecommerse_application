@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_shop/HomePage.dart';
-import 'package:mobile_shop/main.dart';
+import 'package:mobile_shop/screens/home_screen.dart';
 
 class firstPage extends StatefulWidget {
   const firstPage({Key? key}) : super(key: key);
@@ -116,7 +115,7 @@ class _firstPageState extends State<firstPage> {
                           Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: ((context) {
-                                return HomeScreen();
+                                return shopHomeScreen();
                               }),
                             ),
                           );

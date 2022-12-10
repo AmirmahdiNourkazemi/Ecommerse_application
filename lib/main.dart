@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_shop/first_screen.dart';
+import 'package:mobile_shop/screens/category_list_screen.dart';
+import 'package:mobile_shop/screens/topSale_screen.dart';
 
 void main() {
   runApp(MainScreen());
@@ -27,7 +29,7 @@ class _MainScreenState extends State<MainScreen> {
           ),
         ),
       ),
-      home: firstPage(),
+      home: TopSaleScreen(),
     );
   }
 }

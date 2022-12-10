@@ -25,21 +25,23 @@ Stack slider() {
         ),
       ),
       Positioned(
-          bottom: 10,
-          child: SmoothPageIndicator(
-              controller: controller, // PageController
-              count: 3,
-              effect: ExpandingDotsEffect(
-                dotWidth: 10.0,
-                dotHeight: 10.0,
-                radius: 40,
-                dotColor: Colors.white,
-                strokeWidth: 0.1,
-                activeDotColor: Color(0xff3B5EDF),
-              ), // your preferred effect
-              onDotClicked: (index) {
-                print('object');
-              }))
+        bottom: 10,
+        child: SmoothPageIndicator(
+          controller: controller, // PageController
+          count: 3,
+          effect: ExpandingDotsEffect(
+            dotWidth: 10.0,
+            dotHeight: 10.0,
+            radius: 40,
+            dotColor: Colors.white,
+            strokeWidth: 0.1,
+            activeDotColor: Color(0xff3B5EDF),
+          ), // your preferred effect
+          onDotClicked: (index) {
+            print('object');
+          },
+        ),
+      )
     ],
   );
 }
