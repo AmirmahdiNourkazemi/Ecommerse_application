@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:mobile_shop/first_screen.dart';
+import 'package:mobile_shop/screens/buyList_screen.dart';
 import 'package:mobile_shop/screens/category_list_screen.dart';
 import 'package:mobile_shop/screens/home_screen.dart';
 import 'package:mobile_shop/screens/profile_Screen.dart';
@@ -196,7 +197,7 @@ List<Widget> getScreen() {
   return <Widget>[
     shopHomeScreen(),
     CategoryScreen(),
-    TopSaleScreen(),
+    CartScreen(),
     ProfileScreen()
   ];
 }
