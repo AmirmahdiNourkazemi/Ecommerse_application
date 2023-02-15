@@ -88,6 +88,7 @@ class _shopHomeScreenState extends State<shopHomeScreen> {
                   child: SizedBox(
                     height: 250,
                     child: ListView.builder(
+                      reverse: true,
                       scrollDirection: Axis.horizontal,
                       itemCount: 10,
                       itemBuilder: (context, index) {
@@ -136,6 +137,7 @@ class _shopHomeScreenState extends State<shopHomeScreen> {
                   child: SizedBox(
                     height: 250,
                     child: ListView.builder(
+                      reverse: true,
                       scrollDirection: Axis.horizontal,
                       itemCount: 10,
                       itemBuilder: (context, index) {

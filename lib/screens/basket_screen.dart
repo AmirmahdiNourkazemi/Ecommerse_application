@@ -20,11 +20,72 @@ class _BasketScreenState extends State<BasketScreen> {
             slivers: [
               SliverToBoxAdapter(child: getSearchInput()),
               SliverToBoxAdapter(
-                child: basketContainerView(),
-              )
+                  child: SizedBox(
+                height: 900,
+                child: ListView.builder(
+                    scrollDirection: Axis.vertical,
+                    itemCount: 10,
+                    itemBuilder: (context, index) {
+                      return basketContainerView();
+                    }),
+              ))
             ],
           ),
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked,
+          floatingActionButton: Padding(
+            padding: EdgeInsets.only(bottom: 20),
+            child: FloatingActionButton.extended(
+              backgroundColor: ColorPicker.green,
+              extendedPadding:
+                  EdgeInsets.symmetric(horizontal: 100, vertical: 10),
+              onPressed: () {},
+              label: Text(
+                'ادامه فرآیند خرید',
+                style: TextStyle(
+                  fontFamily: 'SM',
+                  fontSize: 15,
+                ),
+              ),
+            ),
+          ),
         ),
+      ),
+    );
+  }
+
+  GestureDetector floatingActionBotton() {
+    return GestureDetector(
+      onTap: () {
+        print('object');
+      },
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Container(
+            height: 53,
+            width: 340,
+            margin: const EdgeInsets.symmetric(horizontal: 44, vertical: 20),
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: ColorPicker.green,
+              borderRadius: BorderRadius.circular(
+                15,
+              ),
+            ),
+            child: Center(
+              child: Text(
+                'ادامه فرآیند خرید',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontFamily: 'SB',
+                  fontSize: 16,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -62,8 +123,7 @@ class basketContainerView extends StatelessWidget {
                   children: [
                     Text(
                       '...آیفون ۱۳ پرومکس دوسیم کا',
-                      style:
-                          TextStyle(fontFamily: 'SM', fontSize: 16),
+                      style: TextStyle(fontFamily: 'SM', fontSize: 16),
                     ),
                     SizedBox(
                       height: 10,
@@ -133,8 +193,7 @@ class basketContainerView extends StatelessWidget {
                         Container(
                           decoration: BoxDecoration(
                             border: Border.all(
-                                color: Color(0xff858585),
-                                width: 0.5),
+                                color: Color(0xff858585), width: 0.5),
                             color: Colors.white,
                             borderRadius: BorderRadius.all(
                               Radius.circular(8),
@@ -143,14 +202,12 @@ class basketContainerView extends StatelessWidget {
                           width: 94,
                           height: 24,
                           child: Row(
-                            mainAxisAlignment:
-                                MainAxisAlignment.spaceEvenly,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             mainAxisSize: MainAxisSize.max,
                             children: [
                               Column(
                                 mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Image.asset(
                                     'assets/images/up-arrow.png',
@@ -187,8 +244,7 @@ class basketContainerView extends StatelessWidget {
                         Container(
                           decoration: BoxDecoration(
                             border: Border.all(
-                                color: Color(0xff858585),
-                                width: 0.5),
+                                color: Color(0xff858585), width: 0.5),
                             color: Colors.white,
                             borderRadius: BorderRadius.all(
                               Radius.circular(8),
@@ -197,14 +253,12 @@ class basketContainerView extends StatelessWidget {
                           width: 94,
                           height: 24,
                           child: Row(
-                            mainAxisAlignment:
-                                MainAxisAlignment.spaceEvenly,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             mainAxisSize: MainAxisSize.max,
                             children: [
                               Column(
                                 mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Image.asset(
                                     'assets/images/up-arrow.png',
@@ -260,8 +314,7 @@ class basketContainerView extends StatelessWidget {
                     width: 69,
                     height: 24,
                     child: Row(
-                      mainAxisAlignment:
-                          MainAxisAlignment.spaceEvenly,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       mainAxisSize: MainAxisSize.max,
                       children: [
                         Text(
@@ -275,8 +328,7 @@ class basketContainerView extends StatelessWidget {
                         Container(
                           height: 15,
                           width: 15,
-                          child: Image.asset(
-                              'assets/images/trash_icon.png'),
+                          child: Image.asset('assets/images/trash_icon.png'),
                         )
                       ],
                     ),
@@ -298,8 +350,7 @@ class basketContainerView extends StatelessWidget {
                     width: 62,
                     height: 24,
                     child: Row(
-                      mainAxisAlignment:
-                          MainAxisAlignment.spaceEvenly,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       mainAxisSize: MainAxisSize.max,
                       children: [
                         Text(
@@ -313,8 +364,7 @@ class basketContainerView extends StatelessWidget {
                         Container(
                           height: 15,
                           width: 15,
-                          child: Image.asset(
-                              'assets/images/icon_like.png'),
+                          child: Image.asset('assets/images/icon_like.png'),
                         )
                       ],
                     ),
@@ -324,8 +374,7 @@ class basketContainerView extends StatelessWidget {
                   ),
                   Container(
                     decoration: BoxDecoration(
-                      border: Border.all(
-                          color: Color(0xff858585), width: 0.5),
+                      border: Border.all(color: Color(0xff858585), width: 0.5),
                       color: Colors.white,
                       borderRadius: BorderRadius.all(
                         Radius.circular(8),
@@ -334,14 +383,12 @@ class basketContainerView extends StatelessWidget {
                     width: 45,
                     height: 24,
                     child: Row(
-                      mainAxisAlignment:
-                          MainAxisAlignment.spaceEvenly,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       mainAxisSize: MainAxisSize.max,
                       children: [
                         Column(
                           mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment:
-                              MainAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Image.asset(
                               'assets/images/up-arrow.png',
@@ -368,9 +415,7 @@ class basketContainerView extends StatelessWidget {
             SizedBox(
               height: 20,
             ),
-            Center(
-                child:
-                    Image.asset('assets/images/line_seprator.png')),
+            Center(child: Image.asset('assets/images/line_seprator.png')),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 10),
               child: Row(
