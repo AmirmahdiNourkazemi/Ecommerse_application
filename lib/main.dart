@@ -6,6 +6,7 @@ import 'package:mobile_shop/screens/basket_screen.dart';
 import 'package:mobile_shop/screens/buyList_screen.dart';
 import 'package:mobile_shop/screens/category_list_screen.dart';
 import 'package:mobile_shop/screens/home_screen.dart';
+import 'package:mobile_shop/screens/login_screen.dart';
 import 'package:mobile_shop/screens/profile_Screen.dart';
 import 'package:mobile_shop/screens/topSale_screen.dart';
 
@@ -123,8 +124,24 @@ class _MainScreenState extends State<MainScreen> {
                     // icon: ,
                     label: 'دسته بندی'),
                 BottomNavigationBarItem(
-                    icon: Container(
-                      child: Image.asset('assets/images/bagBottonNav.png'),
+                  icon: Container(
+                    child: Image.asset('assets/images/bagBottonNav.png'),
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.blue,
+                          blurRadius: 20,
+                          spreadRadius: -7,
+                          offset: Offset(0.0, 13),
+                        )
+                      ],
+                    ),
+                  ),
+                  activeIcon: Padding(
+                    padding: const EdgeInsets.only(bottom: 3),
+                    child: Container(
+                      child:
+                          Image.asset('assets/images/ActivebagbottonNav.png'),
                       decoration: BoxDecoration(
                         boxShadow: [
                           BoxShadow(
@@ -132,32 +149,33 @@ class _MainScreenState extends State<MainScreen> {
                             blurRadius: 20,
                             spreadRadius: -7,
                             offset: Offset(0.0, 13),
-                          )
+                          ),
                         ],
                       ),
                     ),
-                    activeIcon: Padding(
-                      padding: const EdgeInsets.only(bottom: 3),
-                      child: Container(
-                        child:
-                            Image.asset('assets/images/ActivebagbottonNav.png'),
-                        decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.blue,
-                              blurRadius: 20,
-                              spreadRadius: -7,
-                              offset: Offset(0.0, 13),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    // icon: ,
-                    label: 'سبد خرید'),
+                  ),
+                  // icon: ,
+                  label: 'سبد خرید',
+                ),
                 BottomNavigationBarItem(
-                    icon: Container(
-                      child: Image.asset('assets/images/profileBottonNav.png'),
+                  icon: Container(
+                    child: Image.asset('assets/images/profileBottonNav.png'),
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.blue,
+                          blurRadius: 20,
+                          spreadRadius: -7,
+                          offset: Offset(0.0, 13),
+                        )
+                      ],
+                    ),
+                  ),
+                  activeIcon: Padding(
+                    padding: const EdgeInsets.only(bottom: 3),
+                    child: Container(
+                      child: Image.asset(
+                          'assets/images/profileActiveBottonNav.png'),
                       decoration: BoxDecoration(
                         boxShadow: [
                           BoxShadow(
@@ -165,28 +183,13 @@ class _MainScreenState extends State<MainScreen> {
                             blurRadius: 20,
                             spreadRadius: -7,
                             offset: Offset(0.0, 13),
-                          )
+                          ),
                         ],
                       ),
                     ),
-                    activeIcon: Padding(
-                      padding: const EdgeInsets.only(bottom: 3),
-                      child: Container(
-                        child: Image.asset(
-                            'assets/images/profileActiveBottonNav.png'),
-                        decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.blue,
-                              blurRadius: 20,
-                              spreadRadius: -7,
-                              offset: Offset(0.0, 13),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    label: 'حساب کاربری')
+                  ),
+                  label: 'حساب کاربری',
+                )
               ],
             ),
           ),
@@ -201,6 +204,6 @@ List<Widget> getScreen() {
     shopHomeScreen(),
     CategoryScreen(),
     BasketScreen(),
-    ProfileScreen()
+    LoginScreen()
   ];
 }

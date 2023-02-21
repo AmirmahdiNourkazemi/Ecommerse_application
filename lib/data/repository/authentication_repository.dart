@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:mobile_shop/data/datasource/authentication_datasource.dart';
 import 'package:mobile_shop/di/di.dart';
 import 'package:mobile_shop/util/api_exeption.dart';
+import 'package:mobile_shop/util/auth_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class IAuthRepository {
@@ -12,7 +13,7 @@ abstract class IAuthRepository {
 
 class AuthenticationRepository extends IAuthRepository {
   final IAuthenticationDatasource _datasource = locator.get();
-  final SharedPreferences _sharedPreferences = locator.get();
+  //final SharedPreferences _sharedPreferences = locator.get();
 
   @override
   Future<Either<String, String>> register(
@@ -30,7 +31,7 @@ class AuthenticationRepository extends IAuthRepository {
     try {
       String token = await _datasource.login(username, password);
       if (token.isNotEmpty) {
-        _sharedPreferences.setString('access_token', token);
+        AuthMnager.saveToken(token);
         return right('شما وارد شده اید');
       } else {
         return left('خطایی در ورود پیش آمده است');
