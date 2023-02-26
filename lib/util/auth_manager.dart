@@ -21,6 +21,6 @@ class AuthMnager {
 
   static bool isLogin() {
     String token = readAuth();
-    return readAuth().isNotEmpty; //true
+    return token.isNotEmpty; //true
   }
 }

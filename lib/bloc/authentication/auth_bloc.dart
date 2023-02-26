@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:bloc/bloc.dart';
 import 'package:mobile_shop/bloc/authentication/auth_state.dart';
 import 'package:mobile_shop/bloc/authentication/auth_event.dart';
@@ -12,7 +10,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthLoginRequest>(
       (event, emit) async {
         emit(AuthLoginState());
-        await _repository.login(event.username, event.password);
+        var response = await _repository.login(event.username, event.password);
+        emit(AuthResponseState(response));
       },
     );
   }

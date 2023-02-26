@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mobile_shop/bloc/authentication/auth_bloc.dart';
+import 'package:mobile_shop/bloc/authentication/auth_event.dart';
+import 'package:mobile_shop/bloc/authentication/auth_state.dart';
 
 class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+  LoginScreen({super.key});
+  final _usernameTextController = TextEditingController(text: 'amirmahdi');
+  final _passwordTextController = TextEditingController(text: '12345678');
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +32,10 @@ class LoginScreen extends StatelessWidget {
                 Text(
                   'اپل شاپ',
                   style: TextStyle(
-                      fontSize: 22, fontFamily: 'SB', color: Colors.white),
+                    fontSize: 22,
+                    fontFamily: 'SB',
+                    color: Colors.white,
+                  ),
                 ),
               ],
             ),
@@ -49,6 +58,7 @@ class LoginScreen extends StatelessWidget {
                       Padding(
                         padding: EdgeInsets.only(left: 20, right: 20),
                         child: TextField(
+                          controller: _usernameTextController,
                           decoration: InputDecoration(
                             labelText: 'نام کاربری',
                             labelStyle: TextStyle(fontFamily: 'SB'),
@@ -69,18 +79,23 @@ class LoginScreen extends StatelessWidget {
                         padding:
                             EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                         child: TextField(
+                          controller: _passwordTextController,
                           decoration: InputDecoration(
                             labelText: 'رمز عبور',
                             labelStyle: TextStyle(fontFamily: 'SB'),
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(15),
-                              borderSide:
-                                  BorderSide(color: Colors.black, width: 3),
+                              borderSide: BorderSide(
+                                color: Colors.black,
+                                width: 3,
+                              ),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(15),
-                              borderSide:
-                                  BorderSide(color: Colors.blue, width: 3),
+                              borderSide: BorderSide(
+                                color: Colors.blue,
+                                width: 3,
+                              ),
                             ),
                           ),
                         ),
@@ -88,21 +103,48 @@ class LoginScreen extends StatelessWidget {
                       SizedBox(
                         height: 10,
                       ),
-                      ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(20))),
-                          minimumSize: Size(200, 50),
-                        ),
-                        child: Text(
-                          'ورود به حساب کاربری',
-                          style: TextStyle(
-                            fontFamily: 'SB',
-                            fontSize: 18,
-                          ),
-                        ),
+                      BlocBuilder<AuthBloc, AuthState>(
+                        builder: (((context, state) {
+                          if (state is AuthInitiateState) {
+                            return ElevatedButton(
+                              onPressed: () {
+                                BlocProvider.of<AuthBloc>(context).add(
+                                  AuthLoginRequest(
+                                    _usernameTextController.text,
+                                    _passwordTextController.text,
+                                  ),
+                                );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(20),
+                                  ),
+                                ),
+                                minimumSize: Size(200, 50),
+                              ),
+                              child: Text(
+                                'ورود به حساب کاربری',
+                                style: TextStyle(
+                                  fontFamily: 'SB',
+                                  fontSize: 18,
+                                ),
+                              ),
+                            );
+                          }
+                          if (state is AuthLoadingState) {
+                            return CircularProgressIndicator(
+                              backgroundColor: Colors.black,
+                            );
+                          }
+                          if (state is AuthResponseState) {
+                            return state.response
+                                .fold((l) => Text(l), (r) => Text(r));
+                          }
+                          return CircularProgressIndicator(
+                            backgroundColor: Colors.black,
+                          );
+                        })),
                       ),
                     ],
                   ),

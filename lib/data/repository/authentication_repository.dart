@@ -13,13 +13,13 @@ abstract class IAuthRepository {
 
 class AuthenticationRepository extends IAuthRepository {
   final IAuthenticationDatasource _datasource = locator.get();
-  //final SharedPreferences _sharedPreferences = locator.get();
+  final SharedPreferences _sharedPreferences = locator.get();
 
   @override
   Future<Either<String, String>> register(
       String username, String password, String passwordConfirm) async {
     try {
-      await _datasource.register('amirmahdi', '12345678', '12345678');
+      // await _datasource.register('amirmahdi', '12345678', '12345678');
       return right('ثبت نام انجام شد !');
     } on ApiExeption catch (ex) {
       return left(ex.message ?? 'null');
@@ -37,7 +37,7 @@ class AuthenticationRepository extends IAuthRepository {
         return left('خطایی در ورود پیش آمده است');
       }
     } on ApiExeption catch (e) {
-      return left('${e.message}');
+      return left('${e.message.toString()}');
     }
   }
 }

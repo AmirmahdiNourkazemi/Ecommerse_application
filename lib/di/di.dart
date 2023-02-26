@@ -1,7 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobile_shop/data/datasource/authentication_datasource.dart';
+import 'package:mobile_shop/data/datasource/category_datasource.dart';
 import 'package:mobile_shop/data/repository/authentication_repository.dart';
+import 'package:mobile_shop/data/repository/category_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 var locator = GetIt.instance;
@@ -14,6 +16,9 @@ Future<void> getItInit() async {
 //datasource
   locator
       .registerFactory<IAuthenticationDatasource>(() => AuthenticationRemote());
+  locator
+      .registerFactory<ICategoryDatasource>(() => CategoryRemoteDatasource());
 //repository
   locator.registerFactory<IAuthRepository>(() => AuthenticationRepository());
+  locator.registerFactory<ICategoryRepository>(() => CategoryRepository());
 }

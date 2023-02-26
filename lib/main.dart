@@ -1,5 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mobile_shop/bloc/authentication/auth_bloc.dart';
 import 'package:mobile_shop/di/di.dart';
 import 'package:mobile_shop/first_screen.dart';
 import 'package:mobile_shop/screens/basket_screen.dart';
@@ -9,6 +11,8 @@ import 'package:mobile_shop/screens/home_screen.dart';
 import 'package:mobile_shop/screens/login_screen.dart';
 import 'package:mobile_shop/screens/profile_Screen.dart';
 import 'package:mobile_shop/screens/topSale_screen.dart';
+
+import 'bloc/category/category_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,7 +44,15 @@ class _MainScreenState extends State<MainScreen> {
         ),
       ),
       home: Scaffold(
-        body: IndexedStack(index: selectedIndex, children: getScreen()),
+        body: IndexedStack(
+          index: selectedIndex,
+          children: getScreen(),
+        ) //BlocProvider(
+        //   create: (context) => AuthBloc(),
+        //   child: LoginScreen(),
+        // )
+        //
+        ,
         bottomNavigationBar: ClipRRect(
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 80, sigmaY: 70),
@@ -202,8 +214,11 @@ class _MainScreenState extends State<MainScreen> {
 List<Widget> getScreen() {
   return <Widget>[
     shopHomeScreen(),
-    CategoryScreen(),
+    BlocProvider(
+      create: (context) => CategoryBloc(),
+      child: CategoryScreen(),
+    ),
     BasketScreen(),
-    LoginScreen()
+    ProfileScreen()
   ];
 }

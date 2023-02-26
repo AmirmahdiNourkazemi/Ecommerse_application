@@ -1,9 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mobile_shop/bloc/category/category_bloc.dart';
+import 'package:mobile_shop/bloc/category/category_state.dart';
+import 'package:mobile_shop/cached_image.dart';
+import 'package:mobile_shop/data/model/category.dart';
+import 'package:mobile_shop/data/repository/category_repository.dart';
 
-class CategoryScreen extends StatelessWidget {
+import '../bloc/category/category_event.dart';
+
+class CategoryScreen extends StatefulWidget {
   const CategoryScreen({Key? key}) : super(key: key);
 
   @override
+  State<CategoryScreen> createState() => _CategoryScreenState();
+}
+
+class _CategoryScreenState extends State<CategoryScreen> {
+  List<Category>? list;
+  @override
+  void initState() {
+    BlocProvider.of<CategoryBloc>(context).add(CategoryRequestList());
+    super.initState();
+  }
+
   Widget build(BuildContext context) {
     return Container(
       color: Color(0xffE5E5E5),
@@ -15,29 +34,62 @@ class CategoryScreen extends StatelessWidget {
               SliverToBoxAdapter(
                 child: getSearchInput(),
               ),
-              SliverPadding(
-                padding: EdgeInsets.symmetric(horizontal: 44),
-                sliver: SliverGrid(
-                  delegate: SliverChildBuilderDelegate(
-                    ((context, index) {
-                      return Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(15),
-                          ),
-                        ),
-                        child: Image.asset('assets/images/Image_category.png'),
-                      );
-                    }),
-                  ),
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      mainAxisSpacing: 20,
-                      crossAxisSpacing: 20),
-                ),
-              )
+              BlocBuilder<CategoryBloc, CategoryState>(
+                builder: ((context, state) {
+                  if (state is CategoryLoadingState) {
+                    return SliverToBoxAdapter(
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    );
+                  }
+                  if (state is CategoryResponseState) {
+                    return state.response.fold(
+                      (l) {
+                        return SliverToBoxAdapter(child: Text(l));
+                      },
+                      (r) {
+                        return _ListContainer(
+                          list: r,
+                        );
+                      },
+                    );
+                  }
+                  return SliverToBoxAdapter(
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
+                }),
+              ),
+              //  _ListContainer(list: list)
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class _ListContainer extends StatelessWidget {
+  List<Category>? list;
+  _ListContainer({Key? key, required this.list}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverPadding(
+      padding: EdgeInsets.symmetric(horizontal: 44),
+      sliver: SliverGrid(
+        delegate: SliverChildBuilderDelegate(
+          ((context, index) {
+            return CachedImage(imageUrl: list?[index].thumbnail);
+          }),
+          childCount: list?.length ?? 0,
+        ),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          mainAxisSpacing: 20,
+          crossAxisSpacing: 20,
         ),
       ),
     );
