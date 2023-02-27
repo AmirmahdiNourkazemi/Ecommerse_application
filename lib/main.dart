@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_shop/bloc/authentication/auth_bloc.dart';
+import 'package:mobile_shop/bloc/home/home_bloc.dart';
 import 'package:mobile_shop/di/di.dart';
 import 'package:mobile_shop/first_screen.dart';
 import 'package:mobile_shop/screens/basket_screen.dart';
@@ -213,7 +214,10 @@ class _MainScreenState extends State<MainScreen> {
 
 List<Widget> getScreen() {
   return <Widget>[
-    shopHomeScreen(),
+    BlocProvider(
+      create: (context) => HomeBloc(),
+      child: ShopHomeScreen(),
+    ),
     BlocProvider(
       create: (context) => CategoryBloc(),
       child: CategoryScreen(),

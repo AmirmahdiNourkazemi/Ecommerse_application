@@ -8,7 +8,7 @@ abstract class ICategoryDatasource {
   Future<List<Category>> getCategories();
 }
 
-class CategoryRemoteDatasource extends ICategoryDatasource {
+class CategoryRemoteDatasource extends ICategoryDatasource { 
   final Dio _dio = locator.get();
 
   @override
