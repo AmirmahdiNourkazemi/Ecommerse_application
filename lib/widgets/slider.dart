@@ -17,7 +17,7 @@ class GetSlider extends StatelessWidget {
       alignment: AlignmentDirectional.bottomCenter,
       children: [
         SizedBox(
-          height: 177,
+          height: 200,
           child: PageView.builder(
             controller: controller,
             itemCount: bannerList.length,
@@ -38,8 +38,8 @@ class GetSlider extends StatelessWidget {
             controller: controller, // PageController
             count: 3,
             effect: ExpandingDotsEffect(
-              dotWidth: 10.0,
-              dotHeight: 10.0,
+              dotWidth: 9.0,
+              dotHeight: 7.0,
               radius: 40,
               dotColor: Colors.white,
               strokeWidth: 0.1,

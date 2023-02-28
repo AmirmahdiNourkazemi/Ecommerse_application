@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_shop/bloc/home/home_bloc.dart';
 import 'package:mobile_shop/bloc/home/home_event.dart';
 import 'package:mobile_shop/bloc/home/home_state.dart';
+import 'package:mobile_shop/cached_image.dart';
 import 'package:mobile_shop/constanse/const.dart';
 import 'package:mobile_shop/data/model/banner.dart';
 import 'package:mobile_shop/screens/home_screen.dart';
@@ -11,6 +12,7 @@ import 'package:mobile_shop/widgets/product_item.dart';
 import 'package:mobile_shop/widgets/slider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
+import '../data/model/category.dart';
 import '../data/repository/banner_repository.dart';
 
 class ShopHomeScreen extends StatefulWidget {
@@ -42,12 +44,18 @@ class _ShopHomeScreenState extends State<ShopHomeScreen> {
                 slivers: [
                   if (state is HomeLoadingState) ...[
                     SliverToBoxAdapter(
-                      child: CircularProgressIndicator(
-                        color: Colors.black,
+                      child: Center(
+                        child: SizedBox(
+                          height: 24,
+                          width: 24,
+                          child: CircularProgressIndicator(
+                            color: Colors.black,
+                          ),
+                        ),
                       ),
                     )
                   ],
-                  _getSearchBox(),
+                  GetSearchBox(),
                   if (state is HomeRequestSuccesState) ...[
                     state.bannerList.fold(
                       (exeptionMessage) {
@@ -58,12 +66,23 @@ class _ShopHomeScreenState extends State<ShopHomeScreen> {
                       (listBanner) => _getBanners(listBanner),
                     )
                   ],
-                  _getCategoryList(),
-                  _getlistCategoryBuilder(),
-                  _getBestSellerTitle(),
-                  _getBestSellerProducts(),
-                  _getMostViewTitle(),
-                  _getMostViewProducts(),
+                  GetCategoryList(),
+                  if (state is HomeRequestSuccesState) ...[
+                    state.categoryList.fold(
+                      (l) {
+                        return SliverToBoxAdapter(
+                          child: Text(l),
+                        );
+                      },
+                      (categoryList) {
+                        return GetCategoryBuilder(categoryList);
+                      },
+                    )
+                  ],
+                  GetBestSellerTitle(),
+                  GetBestSellerProducts(),
+                  GetMostViewTitle(),
+                  NetMostViewProducts(),
                 ],
               );
             },
@@ -74,8 +93,8 @@ class _ShopHomeScreenState extends State<ShopHomeScreen> {
   }
 }
 
-class _getMostViewProducts extends StatelessWidget {
-  const _getMostViewProducts({
+class NetMostViewProducts extends StatelessWidget {
+  const NetMostViewProducts({
     Key? key,
   }) : super(key: key);
 
@@ -103,8 +122,8 @@ class _getMostViewProducts extends StatelessWidget {
   }
 }
 
-class _getMostViewTitle extends StatelessWidget {
-  const _getMostViewTitle({
+class GetMostViewTitle extends StatelessWidget {
+  const GetMostViewTitle({
     Key? key,
   }) : super(key: key);
 
@@ -142,8 +161,8 @@ class _getMostViewTitle extends StatelessWidget {
   }
 }
 
-class _getBestSellerProducts extends StatelessWidget {
-  const _getBestSellerProducts({
+class GetBestSellerProducts extends StatelessWidget {
+  const GetBestSellerProducts({
     Key? key,
   }) : super(key: key);
 
@@ -171,8 +190,8 @@ class _getBestSellerProducts extends StatelessWidget {
   }
 }
 
-class _getBestSellerTitle extends StatelessWidget {
-  const _getBestSellerTitle({
+class GetBestSellerTitle extends StatelessWidget {
+  const GetBestSellerTitle({
     Key? key,
   }) : super(key: key);
 
@@ -210,8 +229,8 @@ class _getBestSellerTitle extends StatelessWidget {
   }
 }
 
-class _getCategoryList extends StatelessWidget {
-  const _getCategoryList({
+class GetCategoryList extends StatelessWidget {
+  const GetCategoryList({
     Key? key,
   }) : super(key: key);
 
@@ -237,8 +256,8 @@ class _getCategoryList extends StatelessWidget {
   }
 }
 
-class _getSearchBox extends StatelessWidget {
-  const _getSearchBox({
+class GetSearchBox extends StatelessWidget {
+  const GetSearchBox({
     Key? key,
   }) : super(key: key);
 
@@ -265,67 +284,83 @@ class _getBanners extends StatelessWidget {
   }
 }
 
-Widget _getlistCategoryBuilder() {
-  return SliverToBoxAdapter(
-    child: Padding(
-      padding: EdgeInsets.only(right: 44),
-      child: SizedBox(
-        height: 90,
-        child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: 20,
-          itemBuilder: (context, index) {
-            return Padding(
-              padding: EdgeInsets.only(left: 20),
-              child: categoryHorizontalListView(),
-            );
-          },
+class GetCategoryBuilder extends StatelessWidget {
+  List<Category> _categoryList;
+  GetCategoryBuilder(this._categoryList, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverToBoxAdapter(
+      child: Padding(
+        padding: EdgeInsets.only(right: 44),
+        child: SizedBox(
+          height: 90,
+          child: ListView.builder(
+            reverse: true,
+            scrollDirection: Axis.horizontal,
+            itemCount: _categoryList.length,
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: EdgeInsets.only(left: 20),
+                child: CategoryHorizantalListview(_categoryList[index]),
+              );
+            },
+          ),
         ),
       ),
-    ),
-  );
+    );
+  }
 }
 
-Column categoryHorizontalListView() {
-  return Column(
-    children: [
-      Stack(
-        alignment: AlignmentDirectional.center,
-        children: [
-          Container(
-            height: 56,
-            width: 56,
-            decoration: ShapeDecoration(
-              shadows: [
-                BoxShadow(
-                  color: Colors.red,
-                  blurRadius: 25,
-                  spreadRadius: -15,
-                  offset: Offset(0.0, 15),
-                )
-              ],
-              color: Colors.red,
-              shape: ContinuousRectangleBorder(
-                borderRadius: BorderRadius.circular(40),
+class CategoryHorizantalListview extends StatelessWidget {
+  final Category _category;
+  CategoryHorizantalListview(this._category, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    String categoryColor = 'ff${_category.color}';
+    int hexColor = int.parse(categoryColor, radix: 16);
+    return Column(
+      children: [
+        Stack(
+          alignment: AlignmentDirectional.center,
+          children: [
+            Container(
+              height: 56,
+              width: 56,
+              decoration: ShapeDecoration(
+                shadows: [
+                  BoxShadow(
+                    color: Color(hexColor),
+                    blurRadius: 25,
+                    spreadRadius: -15,
+                    offset: Offset(0.0, 15),
+                  )
+                ],
+                color: Color(hexColor),
+                shape: ContinuousRectangleBorder(
+                  borderRadius: BorderRadius.circular(40),
+                ),
               ),
             ),
-          ),
-          Icon(
-            Icons.mouse,
-            color: Colors.white,
-            size: 29,
-          )
-        ],
-      ),
-      SizedBox(
-        height: 10,
-      ),
-      Text(
-        'همه',
-        style: TextStyle(fontFamily: 'SB', fontSize: 17),
-      )
-    ],
-  );
+            SizedBox(
+              height: 30,
+              child: CachedImage(
+                imageUrl: _category.icon,
+              ),
+            )
+          ],
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        Text(
+          _category.title!,
+          style: TextStyle(fontFamily: 'SB', fontSize: 15),
+        )
+      ],
+    );
+  }
 }
 
 ListView getBannerBuilder() {
