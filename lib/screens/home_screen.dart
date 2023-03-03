@@ -6,6 +6,7 @@ import 'package:mobile_shop/bloc/home/home_event.dart';
 import 'package:mobile_shop/bloc/home/home_state.dart';
 import 'package:mobile_shop/cached_image.dart';
 import 'package:mobile_shop/constanse/const.dart';
+import 'package:mobile_shop/data/datasource/product_datasource.dart';
 import 'package:mobile_shop/data/model/banner.dart';
 import 'package:mobile_shop/screens/home_screen.dart';
 import 'package:mobile_shop/widgets/product_item.dart';
@@ -13,7 +14,9 @@ import 'package:mobile_shop/widgets/slider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../data/model/category.dart';
+import '../data/model/product.dart';
 import '../data/repository/banner_repository.dart';
+import 'buyList_screen.dart';
 
 class ShopHomeScreen extends StatefulWidget {
   const ShopHomeScreen({Key? key}) : super(key: key);
@@ -80,9 +83,25 @@ class _ShopHomeScreenState extends State<ShopHomeScreen> {
                     )
                   ],
                   GetBestSellerTitle(),
-                  GetBestSellerProducts(),
+                  if (state is HomeRequestSuccesState) ...[
+                    state.bestSellerProductList.fold((l) {
+                      return SliverToBoxAdapter(
+                        child: Text(l),
+                      );
+                    }, (productList) {
+                      return GetBestSellerProducts(productList);
+                    })
+                  ],
                   GetMostViewTitle(),
-                  NetMostViewProducts(),
+                  if (state is HomeRequestSuccesState) ...[
+                    state.hotestProductList.fold((l) {
+                      return SliverToBoxAdapter(
+                        child: Text(l),
+                      );
+                    }, (productList) {
+                      return NetMostViewProducts(productList);
+                    })
+                  ],
                 ],
               );
             },
@@ -94,7 +113,9 @@ class _ShopHomeScreenState extends State<ShopHomeScreen> {
 }
 
 class NetMostViewProducts extends StatelessWidget {
-  const NetMostViewProducts({
+  List<Products> _productList;
+  NetMostViewProducts(
+    this._productList, {
     Key? key,
   }) : super(key: key);
 
@@ -108,11 +129,11 @@ class NetMostViewProducts extends StatelessWidget {
           child: ListView.builder(
             reverse: true,
             scrollDirection: Axis.horizontal,
-            itemCount: 10,
+            itemCount: _productList.length,
             itemBuilder: (context, index) {
               return Padding(
                 padding: EdgeInsets.only(left: 20),
-                child: productItem(),
+                child: productItem(_productList[index]),
               );
             },
           ),
@@ -162,7 +183,9 @@ class GetMostViewTitle extends StatelessWidget {
 }
 
 class GetBestSellerProducts extends StatelessWidget {
-  const GetBestSellerProducts({
+  List<Products> _productList;
+  GetBestSellerProducts(
+    this._productList, {
     Key? key,
   }) : super(key: key);
 
@@ -173,16 +196,27 @@ class GetBestSellerProducts extends StatelessWidget {
         padding: EdgeInsets.only(right: 40),
         child: SizedBox(
           height: 250,
-          child: ListView.builder(
-            reverse: true,
-            scrollDirection: Axis.horizontal,
-            itemCount: 10,
-            itemBuilder: (context, index) {
-              return Padding(
-                padding: EdgeInsets.only(left: 20),
-                child: productItem(),
+          child: GestureDetector(
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) {
+                    return CartScreen();
+                  },
+                ),
               );
             },
+            child: ListView.builder(
+              reverse: true,
+              scrollDirection: Axis.horizontal,
+              itemCount: _productList.length,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: EdgeInsets.only(left: 20),
+                  child: productItem(_productList[index]),
+                );
+              },
+            ),
           ),
         ),
       ),

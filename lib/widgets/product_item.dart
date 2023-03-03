@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_shop/cached_image.dart';
+import 'package:mobile_shop/data/model/product.dart';
 
 import '../constanse/const.dart';
 
 class productItem extends StatelessWidget {
-  const productItem({
+  Products _products;
+  productItem(
+    this._products, {
     Key? key,
   }) : super(key: key);
 
@@ -23,16 +27,20 @@ class productItem extends StatelessWidget {
             ),
           ),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Stack(
                 children: [
-                  Center(
-                    child: Container(
-                      height: 140,
-                      width: 79,
-                      child: Image.asset(
-                        'assets/images/iphone-13-pro-max-silver-select 1.png',
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8),
+                    child: Center(
+                      child: Container(
+                        height: 130,
+                        width: 120,
+                        child: CachedImage(
+                          imageUrl: _products.thumbnail,
+                          radious: 10,
+                        ),
                       ),
                     ),
                   ),
@@ -54,23 +62,28 @@ class productItem extends StatelessWidget {
                         ),
                       ),
                       child: Center(
-                          child: Text(
-                        '٪۳',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontFamily: 'SM',
-                          fontSize: 10,
+                        child: Text(
+                          '${_products.persent?.round().toString()}%',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: 'SM',
+                            fontSize: 10,
+                          ),
                         ),
-                      )),
+                      ),
                     ),
                   )
                 ],
               ),
               Padding(
-                padding: EdgeInsets.only(right: 10, bottom: 3),
+                padding: EdgeInsets.only(bottom: 3),
                 child: Text(
-                  'آیفون ۱۳ پرومکس',
+                  _products.name,
+                  softWrap: true,
+                  maxLines: 1,
                   style: TextStyle(fontSize: 14, fontFamily: 'SB'),
+                  //overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
                 ),
               )
             ],
@@ -102,7 +115,7 @@ class productItem extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      '۴۶٬۰۰۰٬۰۰۰',
+                      _products.price.toString(),
                       style: TextStyle(
                         decoration: TextDecoration.lineThrough,
                         color: Colors.white,
@@ -110,7 +123,7 @@ class productItem extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      '۴۵٬۳۵۰٬۰۰۰',
+                      _products.realPrice.toString(),
                       style: TextStyle(
                         color: Colors.white,
                         fontFamily: 'SM',

@@ -21,7 +21,7 @@ class TopSaleScreen extends StatelessWidget {
                 sliver: SliverGrid(
                   delegate: SliverChildBuilderDelegate(
                     ((context, index) {
-                      return productItem();
+                      return Text('data'); //productItem();
                     }),
                   ),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
