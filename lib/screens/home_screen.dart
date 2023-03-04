@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_shop/bloc/home/home_bloc.dart';
 import 'package:mobile_shop/bloc/home/home_event.dart';
 import 'package:mobile_shop/bloc/home/home_state.dart';
+import 'package:mobile_shop/bloc/products/product_bloc.dart';
 import 'package:mobile_shop/cached_image.dart';
 import 'package:mobile_shop/constanse/const.dart';
 import 'package:mobile_shop/data/datasource/product_datasource.dart';
@@ -201,7 +202,10 @@ class GetBestSellerProducts extends StatelessWidget {
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) {
-                    return CartScreen();
+                    return BlocProvider(
+                      create: ((context) => ProductBloc()),
+                      child: CartScreen(),
+                    );
                   },
                 ),
               );
