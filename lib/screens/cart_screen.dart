@@ -7,13 +7,15 @@ import 'package:mobile_shop/bloc/products/product_state.dart';
 import 'package:mobile_shop/cached_image.dart';
 import 'package:mobile_shop/constanse/const.dart';
 import 'package:mobile_shop/data/model/product_image.dart';
+import 'package:mobile_shop/data/model/varient_type.dart';
 import 'package:mobile_shop/data/repository/product_detail_repository.dart';
 import 'package:mobile_shop/di/di.dart';
 
 import '../bloc/products/product_event.dart';
 
 class CartScreen extends StatefulWidget {
-  const CartScreen({Key? key}) : super(key: key);
+  CartScreen({Key? key}) : super(key: key);
+  var selectedItem = 0;
 
   @override
   State<CartScreen> createState() => _CartScreenState();
@@ -54,83 +56,38 @@ class _CartScreenState extends State<CartScreen> {
                   SliverToBoxAdapter(
                     child: Center(
                       child: Text(
-                        'آیفون SE 2022',
+                        '',
                         style: TextStyle(fontFamily: 'SB', fontSize: 16),
                       ),
                     ),
                   ),
                   if (state is ProductDetailResponseState) ...{
-                    state.getImageProduct.fold((l) {
-                      return Text(l);
-                    }, (r) {
-                      return GalleryWidget(r);
+                    state.getImageProduct.fold(
+                      (l) {
+                        return Text(l);
+                      },
+                      (r) {
+                        return GalleryWidget(r);
+                      },
+                    )
+                  },
+                  if (state is ProductDetailResponseState) ...{
+                    state.productVarient.fold((l) {
+                      return SliverToBoxAdapter(
+                        child: Text(l),
+                      );
+                    }, (varientList) {
+                      for (var varient in varientList) {
+                        print(varient.varientType.title);
+                        for (var object in varient.varientList) {
+                          print(object.priceChange);
+                        }
+                      }
+                      return SliverToBoxAdapter(
+                        child: Text('data'),
+                      );
                     })
                   },
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 44, vertical: 20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Text(
-                            'انتخاب رنگ',
-                            style: TextStyle(fontSize: 12, fontFamily: 'SB'),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: Color(0xff858585), width: 0.5),
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(8),
-                                  ),
-                                ),
-                                width: 26,
-                                height: 26,
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Container(
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: Color(0xff858585), width: 0.5),
-                                  color: Colors.red,
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(8),
-                                  ),
-                                ),
-                                width: 26,
-                                height: 26,
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Container(
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: Color(0xff858585), width: 0.5),
-                                  color: Colors.black,
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(8),
-                                  ),
-                                ),
-                                width: 26,
-                                height: 26,
-                              )
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
                   SliverToBoxAdapter(
                     child: Padding(
                       padding: EdgeInsets.symmetric(horizontal: 44),
@@ -589,13 +546,92 @@ class _CartScreenState extends State<CartScreen> {
   }
 }
 
-class GalleryWidget extends StatelessWidget {
+class colorVarient extends StatelessWidget {
+  VarientType varientType;
+  colorVarient(
+    this.varientType, {
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverToBoxAdapter(
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 44, vertical: 20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Text(
+              varientType.title!,
+              style: TextStyle(fontSize: 12, fontFamily: 'SB'),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Color(0xff858585), width: 0.5),
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(8),
+                    ),
+                  ),
+                  width: 26,
+                  height: 26,
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Color(0xff858585), width: 0.5),
+                    color: Colors.red,
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(8),
+                    ),
+                  ),
+                  width: 26,
+                  height: 26,
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Color(0xff858585), width: 0.5),
+                    color: Colors.black,
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(8),
+                    ),
+                  ),
+                  width: 26,
+                  height: 26,
+                )
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class GalleryWidget extends StatefulWidget {
   List<ProductImage> _productList;
+  var seletedItem = 0;
   GalleryWidget(
     this._productList, {
     Key? key,
   }) : super(key: key);
 
+  @override
+  State<GalleryWidget> createState() => _GalleryWidgetState();
+}
+
+class _GalleryWidgetState extends State<GalleryWidget> {
   @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
@@ -644,10 +680,11 @@ class GalleryWidget extends StatelessWidget {
                   ),
                   SizedBox(
                     height: 140,
-                    width: 200,
+                    width: 150,
                     child: CachedImage(
-                      imageUrl: _productList[0].imageUrl,
-                      radious: 20,
+                      imageUrl:
+                          widget._productList[widget.seletedItem].imageUrl,
+                      radious: 15,
                     ),
                   ),
                   SizedBox(
@@ -662,27 +699,34 @@ class GalleryWidget extends StatelessWidget {
                       height: 70,
                       child: ListView.builder(
                         reverse: true,
-                        itemCount: _productList.length,
+                        itemCount: widget._productList.length,
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (context, index) {
-                          return Container(
-                            margin: EdgeInsets.symmetric(horizontal: 3),
-                            height: 70,
-                            width: 70,
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: Colors.grey,
+                          return GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                widget.seletedItem = index;
+                              });
+                            },
+                            child: Container(
+                              margin: EdgeInsets.symmetric(horizontal: 3),
+                              height: 70,
+                              width: 70,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.grey,
+                                ),
+                                color: Colors.white,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(15),
+                                ),
                               ),
-                              color: Colors.white,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(15),
-                              ),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(3.0),
-                              child: CachedImage(
-                                imageUrl: _productList[index].imageUrl,
-                                radious: 20,
+                              child: Padding(
+                                padding: const EdgeInsets.all(3.0),
+                                child: CachedImage(
+                                  imageUrl: widget._productList[index].imageUrl,
+                                  radious: 15,
+                                ),
                               ),
                             ),
                           );

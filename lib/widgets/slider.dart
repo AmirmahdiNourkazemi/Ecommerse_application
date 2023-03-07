@@ -19,6 +19,7 @@ class GetSlider extends StatelessWidget {
         SizedBox(
           height: 200,
           child: PageView.builder(
+            reverse: true,
             controller: controller,
             itemCount: bannerList.length,
             itemBuilder: (context, index) {
@@ -35,6 +36,7 @@ class GetSlider extends StatelessWidget {
         Positioned(
           bottom: 10,
           child: SmoothPageIndicator(
+            textDirection: TextDirection.rtl,
             controller: controller, // PageController
             count: 3,
             effect: ExpandingDotsEffect(

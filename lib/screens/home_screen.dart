@@ -17,7 +17,7 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../data/model/category.dart';
 import '../data/model/product.dart';
 import '../data/repository/banner_repository.dart';
-import 'buyList_screen.dart';
+import 'cart_screen.dart';
 
 class ShopHomeScreen extends StatefulWidget {
   const ShopHomeScreen({Key? key}) : super(key: key);
