@@ -120,7 +120,10 @@ Widget getSearchInput() {
             Text(
               'دسته بندی',
               style: TextStyle(
-                  fontFamily: 'SB', fontSize: 16, color: Color(0xff3B5EDF)),
+                fontFamily: 'SB',
+                fontSize: 16,
+                color: Color(0xff3B5EDF),
+              ),
             ),
           ],
         ),

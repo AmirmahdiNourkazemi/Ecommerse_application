@@ -7,11 +7,13 @@ import 'package:mobile_shop/bloc/products/product_state.dart';
 import 'package:mobile_shop/cached_image.dart';
 import 'package:mobile_shop/constanse/const.dart';
 import 'package:mobile_shop/data/model/product_image.dart';
+import 'package:mobile_shop/data/model/product_variant.dart';
 import 'package:mobile_shop/data/model/varient_type.dart';
 import 'package:mobile_shop/data/repository/product_detail_repository.dart';
 import 'package:mobile_shop/di/di.dart';
 
 import '../bloc/products/product_event.dart';
+import '../data/model/varient.dart';
 
 class CartScreen extends StatefulWidget {
   CartScreen({Key? key}) : super(key: key);
@@ -76,91 +78,10 @@ class _CartScreenState extends State<CartScreen> {
                       return SliverToBoxAdapter(
                         child: Text(l),
                       );
-                    }, (varientList) {
-                      for (var varient in varientList) {
-                        print(varient.varientType.title);
-                        for (var object in varient.varientList) {
-                          print(object.priceChange);
-                        }
-                      }
-                      return SliverToBoxAdapter(
-                        child: Text('data'),
-                      );
+                    }, (productVarientList) {
+                      return VarientContainerGenarator(productVarientList);
                     })
                   },
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 44),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Text(
-                            'انتخاب حافظه داخلی',
-                            style: TextStyle(fontSize: 12, fontFamily: 'SB'),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Container(
-                                width: 74,
-                                height: 26,
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: Color(0xff3B5EDF),
-                                    width: 2.0,
-                                  ),
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(8),
-                                  ),
-                                ),
-                                child: Center(child: Text('128')),
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Container(
-                                width: 74,
-                                height: 26,
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: Color(0xff3B5EDF),
-                                    width: 2.0,
-                                  ),
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(8),
-                                  ),
-                                ),
-                                child: Center(child: Text('256')),
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Container(
-                                width: 74,
-                                height: 26,
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: Color(0xff3B5EDF),
-                                    width: 2.0,
-                                  ),
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(8),
-                                  ),
-                                ),
-                                child: Center(child: Text('512')),
-                              )
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
                   SliverToBoxAdapter(
                     child: Padding(
                       padding:
@@ -360,10 +281,11 @@ class _CartScreenState extends State<CartScreen> {
                                     width: 26,
                                     height: 26,
                                     child: Center(
-                                        child: Text(
-                                      '+10',
-                                      style: TextStyle(fontFamily: 'SB'),
-                                    )),
+                                      child: Text(
+                                        '+10',
+                                        style: TextStyle(fontFamily: 'SB'),
+                                      ),
+                                    ),
                                   )
                                 ],
                               ),
@@ -546,10 +468,11 @@ class _CartScreenState extends State<CartScreen> {
   }
 }
 
-class colorVarient extends StatelessWidget {
-  VarientType varientType;
-  colorVarient(
-    this.varientType, {
+class varientContainer extends StatelessWidget {
+  List<ProductVarient> productVarientList;
+
+  varientContainer(
+    this.productVarientList, {
     Key? key,
   }) : super(key: key);
 
@@ -562,61 +485,151 @@ class colorVarient extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Text(
-              varientType.title!,
+              productVarientList[1].varientType.title!,
               style: TextStyle(fontSize: 12, fontFamily: 'SB'),
             ),
             SizedBox(
               height: 10,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Color(0xff858585), width: 0.5),
-                    color: Colors.white,
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(8),
-                    ),
-                  ),
-                  width: 26,
-                  height: 26,
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Color(0xff858585), width: 0.5),
-                    color: Colors.red,
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(8),
-                    ),
-                  ),
-                  width: 26,
-                  height: 26,
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Color(0xff858585), width: 0.5),
-                    color: Colors.black,
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(8),
-                    ),
-                  ),
-                  width: 26,
-                  height: 26,
-                )
-              ],
-            )
+            StorageVarientList(productVarientList[1].varientList)
+            //ColorVarient(productVarientList[0].varientList)
           ],
         ),
       ),
     );
   }
+}
+
+class VarientContainerGenarator extends StatelessWidget {
+  List<ProductVarient> productVarient;
+  VarientContainerGenarator(this.productVarient, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverToBoxAdapter(
+      child: Column(
+        children: [
+          for (var productVarient in productVarient) ...{
+            if (productVarient.varientList.isNotEmpty) ...{
+              VarientWidgetGenerator(productVarient)
+            }
+          }
+        ],
+      ),
+    );
+  }
+}
+
+class VarientWidgetGenerator extends StatelessWidget {
+  ProductVarient productVarient;
+  VarientWidgetGenerator(this.productVarient, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 44, vertical: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Text(
+            productVarient.varientType.title!,
+            style: TextStyle(fontSize: 12, fontFamily: 'SB'),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          if (productVarient.varientType.type == VarientTypeEnum.COLOR) ...{
+            ColorVarient(productVarient.varientList)
+          },
+          if (productVarient.varientType.type == VarientTypeEnum.STORAGE) ...{
+            StorageVarientList(productVarient.varientList)
+          }
+          //ColorVarient(productVarientList[0].varientList)
+        ],
+      ),
+    );
+    
+  }
+}
+
+class ColorVarient extends StatefulWidget {
+  List<Variant> varientList;
+  ColorVarient(this.varientList, {super.key});
+
+  @override
+  State<ColorVarient> createState() => _ColorVarientState();
+}
+
+class _ColorVarientState extends State<ColorVarient> {
+  @override
+  List<Widget> colorWidget = [];
+
+  void initState() {
+    for (var colorVarient in widget.varientList) {
+      String categoryColor = 'FF${colorVarient.value}';
+      int hexColor = int.parse(categoryColor, radix: 16);
+      var item = Padding(
+        padding: EdgeInsets.all(2.0),
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border.all(color: Color(0xff858585), width: 0.5),
+            color: Color(hexColor),
+            borderRadius: BorderRadius.all(
+              Radius.circular(8),
+            ),
+          ),
+          width: 26,
+          height: 26,
+        ),
+      );
+      SizedBox(
+        width: 10,
+      );
+      colorWidget.add(item);
+    }
+  }
+
+  Widget build(BuildContext context) {
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: SizedBox(
+        height: 26,
+        child: ListView.builder(
+            itemCount: colorWidget.length,
+            scrollDirection: Axis.horizontal,
+            itemBuilder: (context, index) {
+              return colorWidget[index];
+            }),
+      ),
+    );
+  }
+}
+
+List<Widget> _buildColorVarientsOption(List<Variant> varientList) {
+  List<Widget> colorList = [];
+  for (var colorVarient in varientList) {
+    String categoryColor = 'FF${colorVarient.value}';
+    int hexColor = int.parse(categoryColor, radix: 16);
+    var item = Padding(
+      padding: EdgeInsets.all(2.0),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(color: Color(0xff858585), width: 0.5),
+          color: Color(hexColor),
+          borderRadius: BorderRadius.all(
+            Radius.circular(8),
+          ),
+        ),
+        width: 26,
+        height: 26,
+      ),
+    );
+    SizedBox(
+      width: 10,
+    );
+    colorList.add(item);
+  }
+  return colorList;
 }
 
 class GalleryWidget extends StatefulWidget {
@@ -782,4 +795,58 @@ Widget getSearchInput() {
       ),
     ),
   );
+}
+
+class StorageVarientList extends StatefulWidget {
+  List<Variant> storage;
+  StorageVarientList(this.storage, {super.key});
+
+  @override
+  State<StorageVarientList> createState() => _StorageVarientListState();
+}
+
+class _StorageVarientListState extends State<StorageVarientList> {
+  List<Widget> storageListWidget = [];
+  @override
+  void initState() {
+    for (var storage in widget.storage) {
+      var item = Container(
+        width: 74,
+        height: 26,
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: Color(0xff3B5EDF),
+            width: 2.0,
+          ),
+          color: Colors.white,
+          borderRadius: BorderRadius.all(
+            Radius.circular(8),
+          ),
+        ),
+        child: Center(
+          child: Text(storage.value!),
+        ),
+      );
+      storageListWidget.add(item);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: SizedBox(
+        height: 26,
+        child: ListView.builder(
+            itemCount: storageListWidget.length,
+            scrollDirection: Axis.horizontal,
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 2),
+                child: storageListWidget[index],
+              );
+            }),
+      ),
+    );
+  }
 }

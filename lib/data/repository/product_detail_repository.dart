@@ -10,8 +10,8 @@ import '../datasource/detail_product_datasource.dart';
 
 abstract class IDetailRepository {
   Future<Either<String, List<ProductImage>>> getProductImage();
-   Future<Either<String, List<VarientType>>> getVarientType();
-   Future<Either<String, List<ProductVarient>>> getProductVarientType();
+  Future<Either<String, List<VarientType>>> getVarientType();
+  Future<Either<String, List<ProductVarient>>> getProductVarientType();
 }
 
 class ProductImageRepository extends IDetailRepository {
@@ -25,9 +25,9 @@ class ProductImageRepository extends IDetailRepository {
       return left(e.message ?? 'خطا محتوای متنی ندارد');
     }
   }
-  
+
   @override
-  Future<Either<String, List<VarientType>>> getVarientType() async{
+  Future<Either<String, List<VarientType>>> getVarientType() async {
     try {
       var response = await _datasource.getVarientTypes();
       return right(response);
@@ -35,15 +35,14 @@ class ProductImageRepository extends IDetailRepository {
       return left(e.message ?? 'خطا محتوای متنی ندارد');
     }
   }
-  
+
   @override
-  Future<Either<String, List<ProductVarient>>> getProductVarientType() async{
-      try {
+  Future<Either<String, List<ProductVarient>>> getProductVarientType() async {
+    try {
       var response = await _datasource.getProductVarient();
       return right(response);
     } on ApiExeption catch (e) {
       return left(e.message ?? 'خطا محتوای متنی ندارد');
     }
   }
-
 }
