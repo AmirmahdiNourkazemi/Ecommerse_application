@@ -527,7 +527,7 @@ class VarientWidgetGenerator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 44, vertical: 20),
+      padding: EdgeInsets.symmetric(horizontal: 44, vertical: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
@@ -548,7 +548,6 @@ class VarientWidgetGenerator extends StatelessWidget {
         ],
       ),
     );
-    
   }
 }
 
@@ -564,31 +563,6 @@ class _ColorVarientState extends State<ColorVarient> {
   @override
   List<Widget> colorWidget = [];
 
-  void initState() {
-    for (var colorVarient in widget.varientList) {
-      String categoryColor = 'FF${colorVarient.value}';
-      int hexColor = int.parse(categoryColor, radix: 16);
-      var item = Padding(
-        padding: EdgeInsets.all(2.0),
-        child: Container(
-          decoration: BoxDecoration(
-            border: Border.all(color: Color(0xff858585), width: 0.5),
-            color: Color(hexColor),
-            borderRadius: BorderRadius.all(
-              Radius.circular(8),
-            ),
-          ),
-          width: 26,
-          height: 26,
-        ),
-      );
-      SizedBox(
-        width: 10,
-      );
-      colorWidget.add(item);
-    }
-  }
-
   Widget build(BuildContext context) {
     return Directionality(
       textDirection: TextDirection.rtl,
@@ -598,38 +572,26 @@ class _ColorVarientState extends State<ColorVarient> {
             itemCount: colorWidget.length,
             scrollDirection: Axis.horizontal,
             itemBuilder: (context, index) {
-              return colorWidget[index];
+              String categoryColor = 'FF${widget.varientList[index].value}';
+              int hexColor = int.parse(categoryColor, radix: 16);
+              return Padding(
+                padding: EdgeInsets.symmetric(horizontal: 2),
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Color(0xff858585), width: 0.5),
+                    color: Color(hexColor),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(8),
+                    ),
+                  ),
+                  width: 26,
+                  height: 26,
+                ),
+              );
             }),
       ),
     );
   }
-}
-
-List<Widget> _buildColorVarientsOption(List<Variant> varientList) {
-  List<Widget> colorList = [];
-  for (var colorVarient in varientList) {
-    String categoryColor = 'FF${colorVarient.value}';
-    int hexColor = int.parse(categoryColor, radix: 16);
-    var item = Padding(
-      padding: EdgeInsets.all(2.0),
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(color: Color(0xff858585), width: 0.5),
-          color: Color(hexColor),
-          borderRadius: BorderRadius.all(
-            Radius.circular(8),
-          ),
-        ),
-        width: 26,
-        height: 26,
-      ),
-    );
-    SizedBox(
-      width: 10,
-    );
-    colorList.add(item);
-  }
-  return colorList;
 }
 
 class GalleryWidget extends StatefulWidget {
