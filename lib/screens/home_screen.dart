@@ -197,30 +197,16 @@ class GetBestSellerProducts extends StatelessWidget {
         padding: EdgeInsets.only(right: 40),
         child: SizedBox(
           height: 250,
-          child: GestureDetector(
-            onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) {
-                    return BlocProvider(
-                      create: ((context) => ProductBloc()),
-                      child: CartScreen(),
-                    );
-                  },
-                ),
+          child: ListView.builder(
+            reverse: true,
+            scrollDirection: Axis.horizontal,
+            itemCount: _productList.length,
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: EdgeInsets.only(left: 20),
+                child: productItem(_productList[index]),
               );
             },
-            child: ListView.builder(
-              reverse: true,
-              scrollDirection: Axis.horizontal,
-              itemCount: _productList.length,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: EdgeInsets.only(left: 20),
-                  child: productItem(_productList[index]),
-                );
-              },
-            ),
           ),
         ),
       ),

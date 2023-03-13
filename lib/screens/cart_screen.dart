@@ -422,35 +422,21 @@ class _CartScreenState extends State<CartScreen> {
                             Positioned(
                               top: 10,
                               bottom: 0,
-                              child: GestureDetector(
-                                onTap: () async {
-                                  IDetailRepository repository = locator.get();
-                                  var response =
-                                      await repository.getProductImage();
-                                  response.fold((l) {
-                                    print(l);
-                                  }, (r) {
-                                    r.forEach((element) {
-                                      print(element.imageUrl);
-                                    });
-                                  });
-                                },
-                                child: ClipRRect(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(15)),
-                                  child: BackdropFilter(
-                                    filter: ImageFilter.blur(
-                                        sigmaX: 10, sigmaY: 10),
-                                    child: Container(
-                                      height: 53,
-                                      width: 160,
-                                      child: Center(
-                                        child: Text(
-                                          'افزودن به سبد خرید',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontFamily: 'SB'),
-                                        ),
+                              child: ClipRRect(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(15)),
+                                child: BackdropFilter(
+                                  filter: ImageFilter.blur(
+                                      sigmaX: 10, sigmaY: 10),
+                                  child: Container(
+                                    height: 53,
+                                    width: 160,
+                                    child: Center(
+                                      child: Text(
+                                        'افزودن به سبد خرید',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontFamily: 'SB'),
                                       ),
                                     ),
                                   ),
