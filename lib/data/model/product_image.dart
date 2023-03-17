@@ -1,12 +1,12 @@
-import 'package:flutter/foundation.dart';
-
 class ProductImage {
   String? imageUrl;
   String? productId;
+
   ProductImage(this.imageUrl, this.productId);
+
   factory ProductImage.fromJson(Map<String, dynamic> jsonObject) {
     return ProductImage(
         'http://startflutter.ir/api/files/${jsonObject['collectionId']}/${jsonObject['id']}/${jsonObject['image']}',
-        jsonObject['productId']);
+        jsonObject['product_id']);
   }
 }

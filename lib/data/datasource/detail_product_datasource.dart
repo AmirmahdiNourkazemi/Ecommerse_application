@@ -9,7 +9,7 @@ import '../../util/api_exeption.dart';
 import '../model/product_variant.dart';
 
 abstract class IDetailProductDatasource {
-  Future<List<ProductImage>> getGallary();
+  Future<List<ProductImage>> getGallary(String productId);
   Future<List<VarientType>> getVarientTypes();
   Future<List<Variant>> getvarients();
   Future<List<ProductVarient>> getProductVarient();
@@ -18,9 +18,9 @@ abstract class IDetailProductDatasource {
 class DetailProductRemoteDataSource extends IDetailProductDatasource {
   final Dio _dio = locator.get();
   @override
-  Future<List<ProductImage>> getGallary() async {
+  Future<List<ProductImage>> getGallary(String productId) async {
     try {
-      Map<String, String> qparams = {'filter': 'product_id="0tc0e5ju89x5ogj"'};
+      Map<String, String> qparams = {'filter': 'product_id="$productId"'};
 
       var response = await _dio.get('collections/gallery/records',
           queryParameters: qparams);
@@ -81,4 +81,3 @@ class DetailProductRemoteDataSource extends IDetailProductDatasource {
     return productVarientList;
   }
 }
-

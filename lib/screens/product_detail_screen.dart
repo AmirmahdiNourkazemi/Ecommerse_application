@@ -10,25 +10,25 @@ import 'package:mobile_shop/constant/color.dart';
 import 'package:mobile_shop/data/model/product_image.dart';
 import 'package:mobile_shop/data/model/product_variant.dart';
 import 'package:mobile_shop/data/model/varient_type.dart';
-import 'package:mobile_shop/data/repository/product_detail_repository.dart';
-import 'package:mobile_shop/di/di.dart';
 
 import '../bloc/products/product_event.dart';
+import '../data/model/product.dart';
 import '../data/model/varient.dart';
 
-class CartScreen extends StatefulWidget {
-  CartScreen({Key? key}) : super(key: key);
-  var selectedItem = 0;
+class ProductDetailScreen extends StatefulWidget {
+  Products products;
+  ProductDetailScreen(this.products, {Key? key}) : super(key: key);
 
   @override
-  State<CartScreen> createState() => _CartScreenState();
+  State<ProductDetailScreen> createState() => _ProductDetailScreenState();
 }
 
-class _CartScreenState extends State<CartScreen> {
+class _ProductDetailScreenState extends State<ProductDetailScreen> {
   @override
   void initState() {
-    BlocProvider.of<ProductBloc>(context).add(ProductGetInitializedData());
-    super.initState();
+    BlocProvider.of<ProductBloc>(context)
+        .add(ProductGetInitializedData(widget.products.id));
+    super.initState(); 
   }
 
   @override
@@ -54,12 +54,55 @@ class _CartScreenState extends State<CartScreen> {
                     )
                   ],
                   SliverToBoxAdapter(
-                    child: getSearchInput(),
+                    child: Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 44, vertical: 20),
+                      child: Container(
+                        height: 46,
+                        width: 340,
+                        decoration: BoxDecoration(
+                          color: Color(0xffFFFFFF),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(15),
+                          ),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 15, vertical: 10),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Image.asset('assets/images/apple_logo.png'),
+                              SizedBox(
+                                width: 120,
+                              ),
+                              Text(
+                                'آیفون',
+                                style: TextStyle(
+                                  fontFamily: 'SB',
+                                  fontSize: 16,
+                                  color: Color(0xff3B5EDF),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 100,
+                              ),
+                              GestureDetector(
+                                  onTap: () {
+                                    return Navigator.pop(context);
+                                  },
+                                  child: Image.asset(
+                                      'assets/images/back_icon.png'))
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
                   SliverToBoxAdapter(
                     child: Center(
                       child: Text(
-                        '',
+                        widget.products.name,
                         style: TextStyle(fontFamily: 'SB', fontSize: 16),
                       ),
                     ),
@@ -70,7 +113,7 @@ class _CartScreenState extends State<CartScreen> {
                         return Text(l);
                       },
                       (r) {
-                        return GalleryWidget(r);
+                        return GalleryWidget(r, widget.products.thumbnail);
                       },
                     )
                   },
@@ -426,8 +469,8 @@ class _CartScreenState extends State<CartScreen> {
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(15)),
                                 child: BackdropFilter(
-                                  filter: ImageFilter.blur(
-                                      sigmaX: 10, sigmaY: 10),
+                                  filter:
+                                      ImageFilter.blur(sigmaX: 10, sigmaY: 10),
                                   child: Container(
                                     height: 53,
                                     width: 160,
@@ -579,10 +622,12 @@ class _ColorVarientState extends State<ColorVarient> {
 }
 
 class GalleryWidget extends StatefulWidget {
-  List<ProductImage> _productList;
-  var seletedItem = 0;
+  List<ProductImage> productList;
+  int seletedItem = 0;
+  String? defaultProductThumnail;
   GalleryWidget(
-    this._productList, {
+    this.productList,
+    this.defaultProductThumnail, {
     Key? key,
   }) : super(key: key);
 
@@ -601,65 +646,60 @@ class _GalleryWidgetState extends State<GalleryWidget> {
           ),
           Container(
             width: 340,
-            height: 282,
+            height: 300,
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.all(
                 Radius.circular(15),
               ),
             ),
-            child: Visibility(
-              visible: true,
-              child: Column(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          child: Row(
-                            children: [
-                              Image.asset(
-                                'assets/images/star_icon.png',
-                              ),
-                              SizedBox(
-                                width: 10,
-                                height: 18,
-                              ),
-                              Text('4.6'),
-                            ],
+            child: Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Image.asset(
+                            'assets/images/star_icon.png',
                           ),
-                        ),
-                        Image.asset(
-                          'assets/images/icon_like_gray.png',
-                        ),
-                      ],
-                    ),
+                          SizedBox(
+                            width: 10,
+                            height: 18,
+                          ),
+                          Text('4.6'),
+                        ],
+                      ),
+                      Image.asset(
+                        'assets/images/icon_like_gray.png',
+                      ),
+                    ],
                   ),
-                  SizedBox(
-                    height: 140,
-                    width: 150,
-                    child: CachedImage(
-                      imageUrl:
-                          widget._productList[widget.seletedItem].imageUrl,
-                      radious: 15,
-                    ),
+                ),
+                SizedBox(
+                  height: 200,
+                  width: 200,
+                  child: CachedImage(
+                    imageUrl: (widget.productList.isEmpty)
+                        ? widget.defaultProductThumnail
+                        : widget.productList[widget.seletedItem].imageUrl,
+                    radious: 15,
                   ),
-                  SizedBox(
-                    height: 12,
-                  ),
+                ),
+                if (widget.productList.isNotEmpty) ...{
                   Padding(
                     padding: EdgeInsets.symmetric(
                       horizontal: 10,
                       vertical: 10,
                     ),
-                    child: Container(
+                    child: SizedBox(
                       height: 70,
                       child: ListView.builder(
-                        reverse: true,
-                        itemCount: widget._productList.length,
+                        // reverse: true,
                         scrollDirection: Axis.horizontal,
+                        itemCount: widget.productList.length,
                         itemBuilder: (context, index) {
                           return GestureDetector(
                             onTap: () {
@@ -683,7 +723,7 @@ class _GalleryWidgetState extends State<GalleryWidget> {
                               child: Padding(
                                 padding: const EdgeInsets.all(3.0),
                                 child: CachedImage(
-                                  imageUrl: widget._productList[index].imageUrl,
+                                  imageUrl: widget.productList[index].imageUrl,
                                   radious: 15,
                                 ),
                               ),
@@ -693,8 +733,8 @@ class _GalleryWidgetState extends State<GalleryWidget> {
                       ),
                     ),
                   )
-                ],
-              ),
+                }
+              ],
             ),
           )
         ],
@@ -735,7 +775,7 @@ Widget getSearchInput() {
             SizedBox(
               width: 100,
             ),
-            Image.asset('assets/images/back_icon.png')
+            GestureDetector(child: Image.asset('assets/images/back_icon.png'))
           ],
         ),
       ),

@@ -9,7 +9,7 @@ import '../../util/api_exeption.dart';
 import '../datasource/detail_product_datasource.dart';
 
 abstract class IDetailRepository {
-  Future<Either<String, List<ProductImage>>> getProductImage();
+  Future<Either<String, List<ProductImage>>> getProductImage(String productId);
   Future<Either<String, List<VarientType>>> getVarientType();
   Future<Either<String, List<ProductVarient>>> getProductVarientType();
 }
@@ -17,9 +17,9 @@ abstract class IDetailRepository {
 class ProductImageRepository extends IDetailRepository {
   final IDetailProductDatasource _datasource = locator.get();
   @override
-  Future<Either<String, List<ProductImage>>> getProductImage() async {
+  Future<Either<String, List<ProductImage>>> getProductImage(String productId) async {
     try {
-      var response = await _datasource.getGallary();
+      var response = await _datasource.getGallary(productId);
       return right(response);
     } on ApiExeption catch (e) {
       return left(e.message ?? 'خطا محتوای متنی ندارد');

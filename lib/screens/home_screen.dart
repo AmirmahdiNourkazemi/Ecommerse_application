@@ -17,7 +17,7 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../data/model/category.dart';
 import '../data/model/product.dart';
 import '../data/repository/banner_repository.dart';
-import 'cart_screen.dart';
+import 'product_detail_screen.dart';
 
 class ShopHomeScreen extends StatefulWidget {
   const ShopHomeScreen({Key? key}) : super(key: key);
@@ -134,7 +134,7 @@ class NetMostViewProducts extends StatelessWidget {
             itemBuilder: (context, index) {
               return Padding(
                 padding: EdgeInsets.only(left: 20),
-                child: productItem(_productList[index]),
+                child: ProductItem(_productList[index]),
               );
             },
           ),
@@ -204,7 +204,7 @@ class GetBestSellerProducts extends StatelessWidget {
             itemBuilder: (context, index) {
               return Padding(
                 padding: EdgeInsets.only(left: 20),
-                child: productItem(_productList[index]),
+                child: ProductItem(_productList[index]),
               );
             },
           ),
@@ -385,23 +385,6 @@ class CategoryHorizantalListview extends StatelessWidget {
       ],
     );
   }
-}
-
-ListView getBannerBuilder() {
-  return ListView.builder(
-    scrollDirection: Axis.horizontal,
-    itemCount: 3,
-    itemBuilder: (context, index) {
-      return Container(
-        width: 340,
-        height: 177,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Image.asset('assets/images/banner.png'),
-        ),
-      );
-    },
-  );
 }
 
 Widget getSearchInput() {

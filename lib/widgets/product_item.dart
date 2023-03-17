@@ -5,11 +5,11 @@ import 'package:mobile_shop/data/model/product.dart';
 
 import '../bloc/products/product_bloc.dart';
 import '../constanse/const.dart';
-import '../screens/cart_screen.dart';
+import '../screens/product_detail_screen.dart';
 
-class productItem extends StatelessWidget {
+class ProductItem extends StatelessWidget {
   Products _products;
-  productItem(
+  ProductItem(
     this._products, {
     Key? key,
   }) : super(key: key);
@@ -25,8 +25,8 @@ class productItem extends StatelessWidget {
               MaterialPageRoute(
                 builder: (context) {
                   return BlocProvider(
-                    create: ((context) => ProductBloc()),
-                    child: CartScreen(),
+                    create: (context) => ProductBloc(),
+                    child: ProductDetailScreen(_products),
                   );
                 },
               ),
@@ -98,7 +98,6 @@ class productItem extends StatelessWidget {
                     softWrap: true,
                     maxLines: 1,
                     style: TextStyle(fontSize: 14, fontFamily: 'SB'),
-                    //overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.center,
                   ),
                 )

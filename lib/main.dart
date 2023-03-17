@@ -6,7 +6,7 @@ import 'package:mobile_shop/bloc/home/home_bloc.dart';
 import 'package:mobile_shop/di/di.dart';
 import 'package:mobile_shop/first_screen.dart';
 import 'package:mobile_shop/screens/basket_screen.dart';
-import 'package:mobile_shop/screens/cart_screen.dart';
+import 'package:mobile_shop/screens/product_detail_screen.dart';
 import 'package:mobile_shop/screens/category_list_screen.dart';
 import 'package:mobile_shop/screens/home_screen.dart';
 import 'package:mobile_shop/screens/login_screen.dart';

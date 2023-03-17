@@ -13,8 +13,10 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     final IDetailRepository _productRepository = locator.get();
     on<ProductGetInitializedData>((event, emit) async {
       emit(ProductDetailLoadingState());
-      var getProductImage = await _productRepository.getProductImage();
-      var getProductVarientType = await _productRepository.getProductVarientType();
+      var getProductImage =
+          await _productRepository.getProductImage(event.productId);
+      var getProductVarientType =
+          await _productRepository.getProductVarientType();
       emit(ProductDetailResponseState(getProductImage, getProductVarientType));
     });
   }
