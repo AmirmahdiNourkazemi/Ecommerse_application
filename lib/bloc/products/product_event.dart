@@ -2,5 +2,6 @@ abstract class ProductEvent {}
 
 class ProductGetInitializedData extends ProductEvent {
   String productId;
-  ProductGetInitializedData(this.productId);
+  String categoryId;
+  ProductGetInitializedData(this.productId,this.categoryId);
 }

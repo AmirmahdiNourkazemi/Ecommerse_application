@@ -1,5 +1,5 @@
 class Products {
-  String category;
+  String categoryId;
   String collectionId;
   String collectionName;
   String description;
@@ -13,7 +13,7 @@ class Products {
   int? realPrice;
   num? persent;
   Products(
-    this.category,
+    this.categoryId,
     this.collectionId,
     this.collectionName,
     this.description,
@@ -42,5 +42,4 @@ class Products {
         jsonObject['quantity'],
         'http://startflutter.ir/api/files/${jsonObject['collectionId']}/${jsonObject['id']}/${jsonObject['thumbnail']}');
   }
-  
 }

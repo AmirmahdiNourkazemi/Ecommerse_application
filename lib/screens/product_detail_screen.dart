@@ -26,9 +26,9 @@ class ProductDetailScreen extends StatefulWidget {
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
   @override
   void initState() {
-    BlocProvider.of<ProductBloc>(context)
-        .add(ProductGetInitializedData(widget.products.id));
-    super.initState(); 
+    BlocProvider.of<ProductBloc>(context).add(ProductGetInitializedData(
+        widget.products.id, widget.products.categoryId));
+    super.initState();
   }
 
   @override
@@ -53,52 +53,58 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       ),
                     )
                   ],
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 44, vertical: 20),
-                      child: Container(
-                        height: 46,
-                        width: 340,
-                        decoration: BoxDecoration(
-                          color: Color(0xffFFFFFF),
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(15),
+                  if (state is ProductDetailResponseState) ...{
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 44, vertical: 20),
+                        child: Container(
+                          height: 46,
+                          width: 340,
+                          decoration: BoxDecoration(
+                            color: Color(0xffFFFFFF),
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(15),
+                            ),
                           ),
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 15, vertical: 10),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Image.asset('assets/images/apple_logo.png'),
-                              SizedBox(
-                                width: 120,
-                              ),
-                              Text(
-                                'آیفون',
-                                style: TextStyle(
-                                  fontFamily: 'SB',
-                                  fontSize: 16,
-                                  color: Color(0xff3B5EDF),
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 15, vertical: 10),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                Image.asset('assets/images/apple_logo.png'),
+                                Expanded(
+                                  child: state.getCategoryProduct.fold(
+                                    (l) {
+                                      return Text(l);
+                                    },
+                                    (productCategory) {
+                                      return Text(
+                                        productCategory.title ?? 'دسته بندی',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontFamily: 'SB',
+                                          fontSize: 16,
+                                          color: Color(0xff3B5EDF),
+                                        ),
+                                      );
+                                    },
+                                  ),
                                 ),
-                              ),
-                              SizedBox(
-                                width: 100,
-                              ),
-                              GestureDetector(
-                                  onTap: () {
-                                    return Navigator.pop(context);
-                                  },
-                                  child: Image.asset(
-                                      'assets/images/back_icon.png'))
-                            ],
+                                GestureDetector(
+                                    onTap: () {
+                                      return Navigator.pop(context);
+                                    },
+                                    child: Image.asset(
+                                        'assets/images/back_icon.png'))
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ),
+                    )
+                  },
                   SliverToBoxAdapter(
                     child: Center(
                       child: Text(
@@ -646,7 +652,7 @@ class _GalleryWidgetState extends State<GalleryWidget> {
           ),
           Container(
             width: 340,
-            height: 300,
+            height: 322,
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.all(
