@@ -9,6 +9,7 @@ import 'package:mobile_shop/constanse/const.dart';
 import 'package:mobile_shop/constant/color.dart';
 import 'package:mobile_shop/data/model/product_image.dart';
 import 'package:mobile_shop/data/model/product_variant.dart';
+import 'package:mobile_shop/data/model/properties.dart';
 import 'package:mobile_shop/data/model/varient_type.dart';
 
 import '../bloc/products/product_event.dart';
@@ -135,95 +136,15 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       },
                     )
                   },
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 44, vertical: 20),
-                      child: Container(
-                        width: 340,
-                        height: 46,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(15),
-                          ),
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 10),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  Image.asset('assets/images/forward_icon.png'),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  Text(
-                                    'مشاهده',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      fontFamily: 'SB',
-                                      color: Color(0xff3B5EDF),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Text(
-                                ':مشخصات فنی',
-                                style:
-                                    TextStyle(fontSize: 12, fontFamily: 'SB'),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 44),
-                      child: Container(
-                        width: 340,
-                        height: 46,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(15),
-                          ),
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 10),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  Image.asset('assets/images/forward_icon.png'),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  Text(
-                                    'مشاهده',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      fontFamily: 'SB',
-                                      color: Color(0xff3B5EDF),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Text(
-                                ':توضیحات محصول',
-                                style:
-                                    TextStyle(fontSize: 12, fontFamily: 'SB'),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                  if (state is ProductDetailResponseState) ...{
+                    state.getProductProperties.fold(
+                        (l) => SliverToBoxAdapter(
+                              child: Text(l),
+                            ), (propertiesList) {
+                      return getProperties(propertiesList);
+                    })
+                  },
+                  ProductDescription(widget.products.description),
                   SliverToBoxAdapter(
                     child: Padding(
                       padding:
@@ -501,6 +422,219 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               ),
             );
           },
+        ),
+      ),
+    );
+  }
+}
+
+class getProperties extends StatefulWidget {
+  List<Properties> _listProperties;
+  getProperties(
+    this._listProperties, {
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  State<getProperties> createState() => _getPropertiesState();
+}
+
+class _getPropertiesState extends State<getProperties> {
+  bool _isVisible = false;
+  @override
+  Widget build(BuildContext context) {
+    return SliverToBoxAdapter(
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 44, vertical: 20),
+        child: Column(
+          children: [
+            GestureDetector(
+              onTap: () {
+                setState(() {
+                  _isVisible = !_isVisible;
+                });
+              },
+              child: Container(
+                width: 340,
+                height: 46,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(15),
+                  ),
+                ),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Image.asset('assets/images/forward_icon.png'),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            'مشاهده',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontFamily: 'SB',
+                              color: Color(0xff3B5EDF),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Text(
+                        ':مشخصات فنی',
+                        style: TextStyle(fontSize: 12, fontFamily: 'SB'),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Visibility(
+              visible: _isVisible,
+              child: Directionality(
+                textDirection: TextDirection.rtl,
+                child: Container(
+                  width: 340,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(15),
+                    ),
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: widget._listProperties.length,
+                      scrollDirection: Axis.vertical,
+                      itemBuilder: (context, index) {
+                        return Row(
+                          children: [
+                            Flexible(
+                              child: Text(
+                                '${widget._listProperties[index].title}:${widget._listProperties[index].value}',
+                                style: TextStyle(
+                                  overflow: TextOverflow.clip,
+                                  fontFamily: 'SM',
+                                  height: 1.8,
+                                ),
+                              ),
+                            ),
+                          ],
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class ProductDescription extends StatefulWidget {
+  String productDescription;
+  ProductDescription(
+    this.productDescription, {
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  State<ProductDescription> createState() => _ProductDescriptionState();
+}
+
+class _ProductDescriptionState extends State<ProductDescription> {
+  bool _isVisible = false;
+  @override
+  Widget build(BuildContext context) {
+    return SliverToBoxAdapter(
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 44),
+        child: Column(
+          children: [
+            GestureDetector(
+              onTap: () {
+                setState(() {
+                  _isVisible = !_isVisible;
+                });
+              },
+              child: Container(
+                width: 340,
+                height: 46,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(15),
+                  ),
+                ),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Image.asset('assets/images/forward_icon.png'),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            'مشاهده',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontFamily: 'SB',
+                              color: Color(0xff3B5EDF),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Text(
+                        ':توضیحات محصول',
+                        style: TextStyle(fontSize: 12, fontFamily: 'SB'),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Directionality(
+              textDirection: TextDirection.rtl,
+              child: Visibility(
+                visible: _isVisible,
+                child: Container(
+                  width: 340,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black26, width: 1),
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(15),
+                    ),
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    child: Text(
+                      widget.productDescription,
+                      style:
+                          TextStyle(fontFamily: 'SM', height: 2, fontSize: 14),
+                    ),
+                  ),
+                ),
+              ),
+            )
+          ],
         ),
       ),
     );

@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_shop/data/model/category.dart';
 import 'package:mobile_shop/data/model/product_image.dart';
+import 'package:mobile_shop/data/model/properties.dart';
 import 'package:mobile_shop/data/model/varient.dart';
 import 'package:mobile_shop/data/model/varient_type.dart';
 import 'package:mobile_shop/di/di.dart';
@@ -14,6 +15,7 @@ abstract class IDetailProductDatasource {
   Future<List<VarientType>> getVarientTypes(String productId);
   Future<List<Variant>> getvarients(String productId);
   Future<List<ProductVarient>> getProductVarient(String productId);
+  Future<List<Properties>> getProperties(String productId);
   Future<Category> getProductCategory(String categoryId);
 }
 
@@ -57,7 +59,8 @@ class DetailProductRemoteDataSource extends IDetailProductDatasource {
     try {
       Map<String, String> qparams = {'filter': 'product_id="$productId"'};
 
-      var response = await _dio.get('collections/variants/records',queryParameters: qparams);
+      var response = await _dio.get('collections/variants/records',
+          queryParameters: qparams);
       return response.data['items']
           .map<Variant>((jsonObject) => Variant.fromJson(jsonObject))
           .toList();
@@ -96,6 +99,22 @@ class DetailProductRemoteDataSource extends IDetailProductDatasource {
       var response = await _dio.get('collections/category/records',
           queryParameters: qparams);
       return Category.fromMapJson(response.data['items'][0]);
+    } on DioError catch (ex) {
+      throw ApiExeption(ex.response?.data['message'], ex.response?.statusCode);
+    } catch (ex) {
+      throw ApiExeption('unknown error happend', 0);
+    }
+  }
+
+  @override
+  Future<List<Properties>> getProperties(String productId) async {
+    try {
+      Map<String, String> qparams = {'filter': 'product_id="$productId"'};
+      var response = await _dio.get('collections/properties/records',
+          queryParameters: qparams);
+      return response.data['items']
+          .map<Properties>((jsonObject) => Properties.fromJson(jsonObject))
+          .toList();
     } on DioError catch (ex) {
       throw ApiExeption(ex.response?.data['message'], ex.response?.statusCode);
     } catch (ex) {

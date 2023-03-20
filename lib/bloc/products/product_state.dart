@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:mobile_shop/data/model/category.dart';
 import 'package:mobile_shop/data/model/product_image.dart';
 import 'package:mobile_shop/data/model/product_variant.dart';
+import 'package:mobile_shop/data/model/properties.dart';
 import 'package:mobile_shop/data/model/varient_type.dart';
 
 abstract class ProductState {}
@@ -13,6 +14,7 @@ class ProductDetailInitState extends ProductState {}
 class ProductDetailResponseState extends ProductState {
   Either<String, List<ProductImage>> getImageProduct;
   Either<String, List<ProductVarient>> productVarient;
+  Either<String, List<Properties>> getProductProperties;
   Either<String, Category> getCategoryProduct;
-  ProductDetailResponseState(this.getImageProduct, this.productVarient,this.getCategoryProduct);
+  ProductDetailResponseState(this.getImageProduct, this.productVarient,this.getCategoryProduct,this.getProductProperties);
 }
