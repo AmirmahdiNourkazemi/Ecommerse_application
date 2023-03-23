@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_shop/data/model/category.dart';
+import 'package:mobile_shop/data/model/product.dart';
 import 'package:mobile_shop/data/model/product_image.dart';
 import 'package:mobile_shop/data/model/properties.dart';
 import 'package:mobile_shop/data/model/varient.dart';

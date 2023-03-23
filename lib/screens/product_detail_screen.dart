@@ -94,11 +94,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                   ),
                                 ),
                                 GestureDetector(
-                                    onTap: () {
-                                      return Navigator.pop(context);
-                                    },
-                                    child: Image.asset(
-                                        'assets/images/back_icon.png'))
+                                  onTap: () {
+                                    return Navigator.pop(context);
+                                  },
+                                  child: Image.asset(
+                                      'assets/images/back_icon.png'),
+                                )
                               ],
                             ),
                           ),
@@ -141,7 +142,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         (l) => SliverToBoxAdapter(
                               child: Text(l),
                             ), (propertiesList) {
-                      return getProperties(propertiesList);
+                      return GetProperties(propertiesList);
                     })
                   },
                   ProductDescription(widget.products.description),
@@ -428,18 +429,18 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   }
 }
 
-class getProperties extends StatefulWidget {
+class GetProperties extends StatefulWidget {
   List<Properties> _listProperties;
-  getProperties(
+  GetProperties(
     this._listProperties, {
     Key? key,
   }) : super(key: key);
 
   @override
-  State<getProperties> createState() => _getPropertiesState();
+  State<GetProperties> createState() => _GetPropertiesState();
 }
 
-class _getPropertiesState extends State<getProperties> {
+class _GetPropertiesState extends State<GetProperties> {
   bool _isVisible = false;
   @override
   Widget build(BuildContext context) {

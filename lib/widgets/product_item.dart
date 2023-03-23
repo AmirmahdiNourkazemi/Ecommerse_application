@@ -33,7 +33,7 @@ class ProductItem extends StatelessWidget {
             );
           },
           child: Container(
-            height: 163,
+            height: 160,
             width: 160,
             decoration: BoxDecoration(
               color: ColorPicker.whiteColor,
@@ -51,7 +51,7 @@ class ProductItem extends StatelessWidget {
                       padding: const EdgeInsets.only(top: 8),
                       child: Center(
                         child: Container(
-                          height: 130,
+                          height: 120,
                           width: 120,
                           child: CachedImage(
                             imageUrl: _products.thumbnail,
@@ -106,7 +106,7 @@ class ProductItem extends StatelessWidget {
           ),
         ),
         Container(
-          height: 53,
+          height: 40,
           width: 160,
           decoration: BoxDecoration(
             color: ColorPicker.blue,

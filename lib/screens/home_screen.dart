@@ -9,11 +9,13 @@ import 'package:mobile_shop/cached_image.dart';
 import 'package:mobile_shop/constanse/const.dart';
 import 'package:mobile_shop/data/datasource/product_datasource.dart';
 import 'package:mobile_shop/data/model/banner.dart';
+import 'package:mobile_shop/screens/category_filter_screen.dart';
 import 'package:mobile_shop/screens/home_screen.dart';
 import 'package:mobile_shop/widgets/product_item.dart';
 import 'package:mobile_shop/widgets/slider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
+import '../bloc/categoryProduct/category_product_bloc.dart';
 import '../data/model/category.dart';
 import '../data/model/product.dart';
 import '../data/repository/banner_repository.dart';
@@ -344,45 +346,57 @@ class CategoryHorizantalListview extends StatelessWidget {
   Widget build(BuildContext context) {
     String categoryColor = 'ff${_category.color}';
     int hexColor = int.parse(categoryColor, radix: 16);
-    return Column(
-      children: [
-        Stack(
-          alignment: AlignmentDirectional.center,
-          children: [
-            Container(
-              height: 56,
-              width: 56,
-              decoration: ShapeDecoration(
-                shadows: [
-                  BoxShadow(
-                    color: Color(hexColor),
-                    blurRadius: 25,
-                    spreadRadius: -15,
-                    offset: Offset(0.0, 15),
-                  )
-                ],
-                color: Color(hexColor),
-                shape: ContinuousRectangleBorder(
-                  borderRadius: BorderRadius.circular(40),
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: ((context) => BlocProvider(
+                  create: ((context) => CategoryProductBloc()),
+                  child: CategoryFilter(_category),
+                )),
+          ),
+        );
+      },
+      child: Column(
+        children: [
+          Stack(
+            alignment: AlignmentDirectional.center,
+            children: [
+              Container(
+                height: 56,
+                width: 56,
+                decoration: ShapeDecoration(
+                  shadows: [
+                    BoxShadow(
+                      color: Color(hexColor),
+                      blurRadius: 25,
+                      spreadRadius: -15,
+                      offset: Offset(0.0, 15),
+                    )
+                  ],
+                  color: Color(hexColor),
+                  shape: ContinuousRectangleBorder(
+                    borderRadius: BorderRadius.circular(40),
+                  ),
                 ),
               ),
-            ),
-            SizedBox(
-              height: 30,
-              child: CachedImage(
-                imageUrl: _category.icon,
-              ),
-            )
-          ],
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        Text(
-          _category.title!,
-          style: TextStyle(fontFamily: 'SB', fontSize: 15),
-        )
-      ],
+              SizedBox(
+                height: 30,
+                child: CachedImage(
+                  imageUrl: _category.icon,
+                ),
+              )
+            ],
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Text(
+            _category.title!,
+            style: TextStyle(fontFamily: 'SB', fontSize: 15),
+          )
+        ],
+      ),
     );
   }
 }
