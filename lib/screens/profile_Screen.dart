@@ -155,7 +155,7 @@ Widget getSearchInput() {
               width: 100,
             ),
             Text(
-              'حساب کاربری',
+              'حساب',
               style: TextStyle(
                   fontFamily: 'SB', fontSize: 16, color: Color(0xff3B5EDF)),
             ),
