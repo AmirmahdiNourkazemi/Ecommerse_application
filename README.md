@@ -3,8 +3,8 @@
 Ecommerce application
 
 </br>
-<img src="assets/images/screen-1" width="150" height="300">
-<img src="assets/images/screen-2" width="150" height="300">
+<img src="assets/images/screen-1.png" width="150" height="300">
+<img src="assets/images/screen-2.png" width="150" height="300">
 
 
 ## Getting Started
