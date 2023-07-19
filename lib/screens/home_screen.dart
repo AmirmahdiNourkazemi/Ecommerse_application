@@ -48,63 +48,66 @@ class _ShopHomeScreenState extends State<ShopHomeScreen> {
             builder: (context, state) {
               return CustomScrollView(
                 slivers: [
-                  if (state is HomeLoadingState) ...[
+                  if (state is HomeLoadingState) ...{
                     SliverToBoxAdapter(
                       child: Center(
                         child: SizedBox(
-                          height: 24,
-                          width: 24,
-                          child: CircularProgressIndicator(
-                            color: Colors.black,
+                          height: 80,
+                          width: 80,
+                          child: Center(
+                            child: CircularProgressIndicator(
+                              color: Colors.black,
+                            ),
                           ),
                         ),
                       ),
                     )
-                  ],
-                  GetSearchBox(),
-                  if (state is HomeRequestSuccesState) ...[
-                    state.bannerList.fold(
-                      (exeptionMessage) {
-                        return SliverToBoxAdapter(
-                          child: Text(exeptionMessage),
-                        );
-                      },
-                      (listBanner) => _getBanners(listBanner),
-                    )
-                  ],
-                  GetCategoryList(),
-                  if (state is HomeRequestSuccesState) ...[
-                    state.categoryList.fold(
-                      (l) {
+                  } else ...{
+                    GetSearchBox(),
+                    if (state is HomeRequestSuccesState) ...[
+                      state.bannerList.fold(
+                        (exeptionMessage) {
+                          return SliverToBoxAdapter(
+                            child: Text(exeptionMessage),
+                          );
+                        },
+                        (listBanner) => _getBanners(listBanner),
+                      )
+                    ],
+                    GetCategoryList(),
+                    if (state is HomeRequestSuccesState) ...[
+                      state.categoryList.fold(
+                        (l) {
+                          return SliverToBoxAdapter(
+                            child: Text(l),
+                          );
+                        },
+                        (categoryList) {
+                          return GetCategoryBuilder(categoryList);
+                        },
+                      )
+                    ],
+                    GetBestSellerTitle(),
+                    if (state is HomeRequestSuccesState) ...[
+                      state.bestSellerProductList.fold((l) {
                         return SliverToBoxAdapter(
                           child: Text(l),
                         );
-                      },
-                      (categoryList) {
-                        return GetCategoryBuilder(categoryList);
-                      },
-                    )
-                  ],
-                  GetBestSellerTitle(),
-                  if (state is HomeRequestSuccesState) ...[
-                    state.bestSellerProductList.fold((l) {
-                      return SliverToBoxAdapter(
-                        child: Text(l),
-                      );
-                    }, (productList) {
-                      return GetBestSellerProducts(productList);
-                    })
-                  ],
-                  GetMostViewTitle(),
-                  if (state is HomeRequestSuccesState) ...[
-                    state.hotestProductList.fold((l) {
-                      return SliverToBoxAdapter(
-                        child: Text(l),
-                      );
-                    }, (productList) {
-                      return NetMostViewProducts(productList);
-                    })
-                  ],
+                      }, (productList) {
+                        return GetBestSellerProducts(productList);
+                      })
+                    ],
+                    GetMostViewTitle(),
+                    if (state is HomeRequestSuccesState) ...[
+                      state.hotestProductList.fold((l) {
+                        return SliverToBoxAdapter(
+                          child: Text(l),
+                        );
+                      }, (productList) {
+                        return NetMostViewProducts(productList);
+                      })
+                    ],
+                  },
                 ],
               );
             },

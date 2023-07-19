@@ -740,11 +740,11 @@ class _ColorVarientState extends State<ColorVarient> {
                       ? Border.all(
                           color: CustomColors.blueIndicator,
                           width: 3,
-                          strokeAlign: StrokeAlign.outside)
+                          strokeAlign: BorderSide.strokeAlignOutside)
                       : Border.all(
                           color: Color(0xff858585),
                           width: 0.5,
-                          strokeAlign: StrokeAlign.outside,
+                          strokeAlign: BorderSide.strokeAlignOutside,
                         ),
                   color: Color(hexColor),
                   borderRadius: BorderRadius.all(
@@ -823,7 +823,7 @@ class _GalleryWidgetState extends State<GalleryWidget> {
                   height: 200,
                   width: 200,
                   child: CachedImage(
-                    imageUrl: (widget.productList.isEmpty)
+                    imageUrl: (widget.productList.isEmpty) 
                         ? widget.defaultProductThumnail
                         : widget.productList[widget.seletedItem].imageUrl,
                     radious: 15,
@@ -959,11 +959,11 @@ class _StorageVarientListState extends State<StorageVarientList> {
                           ? Border.all(
                               color: CustomColors.blueIndicator,
                               width: 3,
-                              strokeAlign: StrokeAlign.outside)
+                              strokeAlign: BorderSide.strokeAlignOutside)
                           : Border.all(
                               color: Color(0xff858585),
                               width: 0.5,
-                              strokeAlign: StrokeAlign.outside,
+                              strokeAlign: BorderSide.strokeAlignOutside,
                             ),
                       color: Colors.white,
                       borderRadius: BorderRadius.all(

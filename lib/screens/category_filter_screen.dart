@@ -55,6 +55,7 @@ class _CategoryFilterState extends State<CategoryFilter> {
                               SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
                             mainAxisSpacing: 30,
+                            childAspectRatio: 0.8,
                           ),
                         ),
                       ),

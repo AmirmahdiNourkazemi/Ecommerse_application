@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_shop/data/repository/authentication_repository.dart';
-import 'package:mobile_shop/di/di.dart';
-import 'package:mobile_shop/screens/home_screen.dart';
 import 'package:mobile_shop/util/auth_manager.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-import '../data/datasource/authentication_datasource.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);

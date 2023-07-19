@@ -15,7 +15,8 @@ class BannerRemoteDatasource extends IBannerDatasource {
       var response = await _dio.get('collections/banner/records');
       return response.data['items']
           .map<BannerCampain>(
-              (jsonObject) => BannerCampain.fromJson(jsonObject))
+            (jsonObject) => BannerCampain.fromJson(jsonObject),
+          )
           .toList();
     } on DioError catch (ex) {
       throw ApiExeption(ex.response?.data['message'], ex.response?.statusCode);
