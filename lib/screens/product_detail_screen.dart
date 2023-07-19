@@ -2,11 +2,13 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive/hive.dart';
 import 'package:mobile_shop/bloc/products/product_bloc.dart';
 import 'package:mobile_shop/bloc/products/product_state.dart';
 import 'package:mobile_shop/cached_image.dart';
 import 'package:mobile_shop/constanse/const.dart';
 import 'package:mobile_shop/constant/color.dart';
+import 'package:mobile_shop/data/model/basket_item.dart';
 import 'package:mobile_shop/data/model/product_image.dart';
 import 'package:mobile_shop/data/model/product_variant.dart';
 import 'package:mobile_shop/data/model/properties.dart';
@@ -374,48 +376,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             ),
                           ],
                         ),
-                        Stack(
-                          alignment: AlignmentDirectional.bottomCenter,
-                          clipBehavior: Clip.none,
-                          children: [
-                            Positioned(
-                              child: Container(
-                                height: 60,
-                                width: 140,
-                                decoration: BoxDecoration(
-                                  color: ColorPicker.blue,
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(15),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Positioned(
-                              top: 10,
-                              bottom: 0,
-                              child: ClipRRect(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(15)),
-                                child: BackdropFilter(
-                                  filter:
-                                      ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                                  child: Container(
-                                    height: 53,
-                                    width: 160,
-                                    child: Center(
-                                      child: Text(
-                                        'افزودن به سبد خرید',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontFamily: 'SB'),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                        AddToBasketButton(widget.products),
                       ],
                     ),
                   )
@@ -424,6 +385,60 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             );
           },
         ),
+      ),
+    );
+  }
+}
+
+class AddToBasketButton extends StatelessWidget {
+  Products products;
+  AddToBasketButton(
+    this.products, {
+    super.key,
+  });
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        context.read<ProductBloc>().add(AddProductToBasket(products));
+      },
+      child: Stack(
+        alignment: AlignmentDirectional.bottomCenter,
+        clipBehavior: Clip.none,
+        children: [
+          Positioned(
+            child: Container(
+              height: 60,
+              width: 140,
+              decoration: BoxDecoration(
+                color: ColorPicker.blue,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(15),
+                ),
+              ),
+            ),
+          ),
+          Positioned(
+            top: 10,
+            bottom: 0,
+            child: ClipRRect(
+              borderRadius: BorderRadius.all(Radius.circular(15)),
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                child: Container(
+                  height: 53,
+                  width: 160,
+                  child: Center(
+                    child: Text(
+                      'افزودن به سبد خرید',
+                      style: TextStyle(color: Colors.white, fontFamily: 'SB'),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -823,7 +838,7 @@ class _GalleryWidgetState extends State<GalleryWidget> {
                   height: 200,
                   width: 200,
                   child: CachedImage(
-                    imageUrl: (widget.productList.isEmpty) 
+                    imageUrl: (widget.productList.isEmpty)
                         ? widget.defaultProductThumnail
                         : widget.productList[widget.seletedItem].imageUrl,
                     radious: 15,

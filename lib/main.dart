@@ -1,8 +1,10 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:mobile_shop/bloc/authentication/auth_bloc.dart';
 import 'package:mobile_shop/bloc/home/home_bloc.dart';
+import 'package:mobile_shop/data/model/basket_item.dart';
 import 'package:mobile_shop/di/di.dart';
 import 'package:mobile_shop/first_screen.dart';
 import 'package:mobile_shop/screens/basket_screen.dart';
@@ -19,6 +21,9 @@ import 'bloc/category/category_bloc.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await getItInit();
+  await Hive.initFlutter();
+  Hive.registerAdapter(BasketItemAdapter());
+  await Hive.openBox<BasketItem>("BasketBox");
   runApp(MainScreen());
 }
 

@@ -1,14 +1,23 @@
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:mobile_shop/cached_image.dart';
+import 'package:mobile_shop/data/model/basket_item.dart';
 import 'package:mobile_shop/util/extentions/string_extentions.dart';
 
 import '../constant/color.dart';
 
-class CardScreen extends StatelessWidget {
+class CardScreen extends StatefulWidget {
   const CardScreen({super.key});
 
   @override
+  State<CardScreen> createState() => _CardScreenState();
+}
+
+class _CardScreenState extends State<CardScreen> {
+  @override
   Widget build(BuildContext context) {
+    var box = Hive.box<BasketItem>('BasketBox');
     return Scaffold(
         backgroundColor: CustomColors.backgroundScreenColor,
         body: SafeArea(
@@ -44,16 +53,17 @@ class CardScreen extends StatelessWidget {
                                   fontSize: 16,
                                   color: CustomColors.blue),
                             ),
-                          )
+                          ),
                         ],
                       ),
                     ),
                   ),
                 ),
                 SliverList(
-                    delegate: SliverChildBuilderDelegate((context, index) {
-                  return CardItem();
-                }, childCount: 10)),
+                  delegate: SliverChildBuilderDelegate((context, index) {
+                    return CardItem(box.values.toList()[index]);
+                  }, childCount: box.values.length),
+                ),
                 SliverPadding(padding: EdgeInsets.only(bottom: 100))
               ],
             ),
@@ -80,7 +90,9 @@ class CardScreen extends StatelessWidget {
 }
 
 class CardItem extends StatelessWidget {
-  const CardItem({
+  BasketItem _basketItem;
+  CardItem(
+    this._basketItem, {
     Key? key,
   }) : super(key: key);
 
@@ -205,8 +217,12 @@ class CardItem extends StatelessWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(right: 10),
-                  child: Image.asset('assets/images/iphone.png'),
-                )
+                  child: SizedBox(
+                    width: 100,
+                    height: 100,
+                    child: CachedImage(imageUrl: _basketItem.thumbnail),
+                  ),
+                ),
               ],
             ),
           ),

@@ -2,11 +2,13 @@ import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobile_shop/data/datasource/authentication_datasource.dart';
 import 'package:mobile_shop/data/datasource/banner_datasource.dart';
+import 'package:mobile_shop/data/datasource/basket_item_datasource.dart';
 import 'package:mobile_shop/data/datasource/category_datasource.dart';
 import 'package:mobile_shop/data/datasource/category_product_datasource.dart';
 import 'package:mobile_shop/data/datasource/detail_product_datasource.dart';
 import 'package:mobile_shop/data/datasource/product_datasource.dart';
 import 'package:mobile_shop/data/repository/authentication_repository.dart';
+import 'package:mobile_shop/data/repository/basket_item_repository.dart';
 import 'package:mobile_shop/data/repository/category_repository.dart';
 import 'package:mobile_shop/data/repository/product_detail_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -33,6 +35,7 @@ Future<void> getItInit() async {
       () => DetailProductRemoteDataSource());
   locator.registerFactory<ICategoryDataSource>(
       () => CategoryProductRemoteDataSource());
+  locator.registerFactory<IbasketDatasource>(() => BasketDatasource());
 //repository
 
   locator.registerFactory<IAuthRepository>(() => AuthenticationRepository());
@@ -42,4 +45,5 @@ Future<void> getItInit() async {
   locator.registerFactory<IDetailRepository>(() => ProductImageRepository());
   locator.registerFactory<ICategoryProductRepository>(
       () => CategoryProductRepository());
+  locator.registerFactory<IBasketItemRepository>(() => BasketRepository());
 }
