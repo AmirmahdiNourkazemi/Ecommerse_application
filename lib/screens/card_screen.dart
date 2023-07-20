@@ -1,6 +1,9 @@
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive/hive.dart';
+import 'package:mobile_shop/bloc/basket/basket_bloc.dart';
+import 'package:mobile_shop/bloc/basket/basket_state.dart';
 import 'package:mobile_shop/cached_image.dart';
 import 'package:mobile_shop/data/model/basket_item.dart';
 import 'package:mobile_shop/util/extentions/string_extentions.dart';
@@ -19,73 +22,90 @@ class _CardScreenState extends State<CardScreen> {
   Widget build(BuildContext context) {
     var box = Hive.box<BasketItem>('BasketBox');
     return Scaffold(
-        backgroundColor: CustomColors.backgroundScreenColor,
-        body: SafeArea(
-            child: Stack(
-          alignment: AlignmentDirectional.bottomCenter,
-          children: [
-            CustomScrollView(
-              slivers: [
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.only(left: 44, right: 44, bottom: 32),
-                    child: Container(
-                      height: 46,
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(15),
-                        ),
-                      ),
-                      child: Row(
-                        children: [
-                          const SizedBox(
-                            width: 16,
-                          ),
-                          Image.asset('assets/images/back_arrow.png'),
-                          const Expanded(
-                            child: Text(
-                              'سبد خرید',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontFamily: 'sb',
-                                  fontSize: 16,
-                                  color: CustomColors.blue),
+      backgroundColor: CustomColors.backgroundScreenColor,
+      body: SafeArea(
+        child: BlocBuilder<BasketBloc, BasketState>(
+          builder: (context, state) {
+            return Stack(
+              alignment: AlignmentDirectional.bottomCenter,
+              children: [
+                CustomScrollView(
+                  slivers: [
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            left: 44, right: 44, bottom: 32),
+                        child: Container(
+                          height: 46,
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(15),
                             ),
                           ),
-                        ],
+                          child: Row(
+                            children: [
+                              const SizedBox(
+                                width: 16,
+                              ),
+                              Image.asset('assets/images/back_arrow.png'),
+                              const Expanded(
+                                child: Text(
+                                  'سبد خرید',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontFamily: 'sb',
+                                      fontSize: 16,
+                                      color: CustomColors.blue),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
+                    if (state is FetchDataBasketState) ...{
+                      state.getAllBasketItem.fold(
+                        (l) => SliverToBoxAdapter(
+                          child: Text(l),
+                        ),
+                        (basketItemList) => SliverList(
+                          delegate: SliverChildBuilderDelegate(
+                            (context, index) {
+                              return CardItem(basketItemList[index]);
+                            },
+                            childCount: basketItemList.length,
+                          ),
+                        ),
+                      ),
+                    },
+                    SliverPadding(padding: EdgeInsets.only(bottom: 100))
+                  ],
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.only(left: 44, right: 44, bottom: 20),
+                  child: SizedBox(
+                    height: 53,
+                    width: MediaQuery.of(context).size.width,
+                    child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          textStyle: TextStyle(fontSize: 18, fontFamily: 'sm'),
+                          backgroundColor: CustomColors.green,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                        ),
+                        onPressed: () {},
+                        child: Text('ادامه فرایند خرید')),
                   ),
-                ),
-                SliverList(
-                  delegate: SliverChildBuilderDelegate((context, index) {
-                    return CardItem(box.values.toList()[index]);
-                  }, childCount: box.values.length),
-                ),
-                SliverPadding(padding: EdgeInsets.only(bottom: 100))
+                )
               ],
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 44, right: 44, bottom: 20),
-              child: SizedBox(
-                height: 53,
-                width: MediaQuery.of(context).size.width,
-                child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      textStyle: TextStyle(fontSize: 18, fontFamily: 'sm'),
-                      backgroundColor: CustomColors.green,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                    ),
-                    onPressed: () {},
-                    child: Text('ادامه فرایند خرید')),
-              ),
-            )
-          ],
-        )));
+            );
+          },
+        ),
+      ),
+    );
   }
 }
 

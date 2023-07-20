@@ -1,13 +1,10 @@
 import 'package:bloc/bloc.dart';
 import 'package:mobile_shop/bloc/products/product_event.dart';
 import 'package:mobile_shop/bloc/products/product_state.dart';
-import 'package:mobile_shop/data/datasource/detail_product_datasource.dart';
-import 'package:mobile_shop/data/model/varient_type.dart';
 import 'package:mobile_shop/data/repository/basket_item_repository.dart';
 import 'package:mobile_shop/data/repository/product_detail_repository.dart';
 
 import '../../data/model/basket_item.dart';
-import '../../data/repository/product_repository.dart';
 import '../../di/di.dart';
 
 class ProductBloc extends Bloc<ProductEvent, ProductState> {

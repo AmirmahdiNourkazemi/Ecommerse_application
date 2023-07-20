@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:mobile_shop/bloc/authentication/auth_bloc.dart';
+import 'package:mobile_shop/bloc/basket/basket_bloc.dart';
 import 'package:mobile_shop/bloc/home/home_bloc.dart';
 import 'package:mobile_shop/data/model/basket_item.dart';
 import 'package:mobile_shop/di/di.dart';
@@ -16,6 +17,7 @@ import 'package:mobile_shop/screens/login_screen.dart';
 import 'package:mobile_shop/screens/profile_Screen.dart';
 import 'package:mobile_shop/screens/topSale_screen.dart';
 
+import 'bloc/basket/basket_event.dart';
 import 'bloc/category/category_bloc.dart';
 
 void main() async {
@@ -228,7 +230,14 @@ List<Widget> getScreen() {
       create: (context) => CategoryBloc(),
       child: CategoryScreen(),
     ),
-    CardScreen(),
+    BlocProvider(
+      create: (context) {
+        var bloc = BasketBloc();
+        bloc.add(GetInitBasketEvent());
+        return bloc;
+      },
+      child: CardScreen(),
+    ),
     ProfileScreen()
   ];
 }
