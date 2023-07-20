@@ -2,30 +2,25 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:mobile_shop/bloc/authentication/auth_bloc.dart';
 import 'package:mobile_shop/bloc/basket/basket_bloc.dart';
 import 'package:mobile_shop/bloc/home/home_bloc.dart';
 import 'package:mobile_shop/data/model/basket_item.dart';
 import 'package:mobile_shop/di/di.dart';
-import 'package:mobile_shop/first_screen.dart';
-import 'package:mobile_shop/screens/basket_screen.dart';
 import 'package:mobile_shop/screens/card_screen.dart';
-import 'package:mobile_shop/screens/product_detail_screen.dart';
 import 'package:mobile_shop/screens/category_list_screen.dart';
 import 'package:mobile_shop/screens/home_screen.dart';
-import 'package:mobile_shop/screens/login_screen.dart';
 import 'package:mobile_shop/screens/profile_Screen.dart';
-import 'package:mobile_shop/screens/topSale_screen.dart';
 
 import 'bloc/basket/basket_event.dart';
 import 'bloc/category/category_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await getItInit();
   await Hive.initFlutter();
   Hive.registerAdapter(BasketItemAdapter());
   await Hive.openBox<BasketItem>("BasketBox");
+  await getItInit();
+
   runApp(MainScreen());
 }
 
@@ -57,10 +52,6 @@ class _MainScreenState extends State<MainScreen> {
           index: selectedIndex,
           children: getScreen(),
         ) //BlocProvider(
-        //   create: (context) => AuthBloc(),
-        //   child: LoginScreen(),
-        // )
-        //
         ,
         bottomNavigationBar: ClipRRect(
           child: BackdropFilter(
@@ -232,7 +223,7 @@ List<Widget> getScreen() {
     ),
     BlocProvider(
       create: (context) {
-        var bloc = BasketBloc();
+        var bloc = locator.get<BasketBloc>();
         bloc.add(GetInitBasketEvent());
         return bloc;
       },

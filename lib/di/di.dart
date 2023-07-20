@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import 'package:mobile_shop/bloc/basket/basket_bloc.dart';
 import 'package:mobile_shop/data/datasource/authentication_datasource.dart';
 import 'package:mobile_shop/data/datasource/banner_datasource.dart';
 import 'package:mobile_shop/data/datasource/basket_item_datasource.dart';
@@ -20,7 +21,10 @@ import '../data/repository/product_repository.dart';
 var locator = GetIt.instance;
 Future<void> getItInit() async {
   locator.registerSingleton<Dio>(
-      Dio(BaseOptions(baseUrl: 'http://startflutter.ir/api/')));
+    Dio(
+      BaseOptions(baseUrl: 'http://startflutter.ir/api/'),
+    ),
+  );
   locator.registerSingleton<SharedPreferences>(
       await SharedPreferences.getInstance());
 
@@ -46,4 +50,7 @@ Future<void> getItInit() async {
   locator.registerFactory<ICategoryProductRepository>(
       () => CategoryProductRepository());
   locator.registerFactory<IBasketItemRepository>(() => BasketRepository());
+
+  //bloc
+  locator.registerSingleton<BasketBloc>(BasketBloc());
 }

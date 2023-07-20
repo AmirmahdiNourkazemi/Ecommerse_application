@@ -21,8 +21,14 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
           await _productRepository.getProductCategory(event.categoryId);
       var getProperties =
           await _productRepository.getProperties(event.productId);
-      emit(ProductDetailResponseState(getProductImage, getProductVarientType,
-          getProductCategory, getProperties));
+      emit(
+        ProductDetailResponseState(
+          getProductImage,
+          getProductVarientType,
+          getProductCategory,
+          getProperties,
+        ),
+      );
     });
     on<AddProductToBasket>(
       (event, emit) {

@@ -3,17 +3,18 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive/hive.dart';
+import 'package:mobile_shop/bloc/basket/basket_bloc.dart';
 import 'package:mobile_shop/bloc/products/product_bloc.dart';
 import 'package:mobile_shop/bloc/products/product_state.dart';
 import 'package:mobile_shop/cached_image.dart';
 import 'package:mobile_shop/constanse/const.dart';
 import 'package:mobile_shop/constant/color.dart';
-import 'package:mobile_shop/data/model/basket_item.dart';
 import 'package:mobile_shop/data/model/product_image.dart';
 import 'package:mobile_shop/data/model/product_variant.dart';
 import 'package:mobile_shop/data/model/properties.dart';
 import 'package:mobile_shop/data/model/varient_type.dart';
 
+import '../bloc/basket/basket_event.dart';
 import '../bloc/products/product_event.dart';
 import '../data/model/product.dart';
 import '../data/model/varient.dart';
@@ -28,12 +29,28 @@ class ProductDetailScreen extends StatefulWidget {
 
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
   @override
-  void initState() {
-    BlocProvider.of<ProductBloc>(context).add(ProductGetInitializedData(
-        widget.products.id, widget.products.categoryId));
-    super.initState();
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider<ProductBloc>(
+      create: (context) {
+        var bloc = ProductBloc();
+        bloc.add(
+          ProductGetInitializedData(
+              widget.products.id, widget.products.categoryId),
+        );
+        return bloc;
+      },
+      child: CardDetailContainer(widget: widget),
+    );
   }
+}
 
+class CardDetailContainer extends StatelessWidget {
+  const CardDetailContainer({
+    super.key,
+    required this.widget,
+  });
+  final ProductDetailScreen widget;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -401,6 +418,7 @@ class AddToBasketButton extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         context.read<ProductBloc>().add(AddProductToBasket(products));
+        context.read<BasketBloc>().add(GetInitBasketEvent());
       },
       child: Stack(
         alignment: AlignmentDirectional.bottomCenter,
