@@ -6,6 +6,7 @@ import 'package:mobile_shop/di/di.dart';
 abstract class IBasketItemRepository {
   Future<Either<String, String>> addProductToBasket(BasketItem basketItem);
   Future<Either<String, List<BasketItem>>> getAllBasketItem();
+  Future<Either<String, int>> finalPrice();
 }
 
 class BasketRepository extends IBasketItemRepository {
@@ -27,6 +28,16 @@ class BasketRepository extends IBasketItemRepository {
       return right(listBasket);
     } catch (e) {
       return left("خطا در نمایش محصول");
+    }
+  }
+
+  @override
+  Future<Either<String, int>> finalPrice() async {
+    try {
+      var totalPrice = await _datasource.getBasketFinalPrice();
+      return right(totalPrice);
+    } catch (e) {
+      return left("خطا در جمع محصول");
     }
   }
 }

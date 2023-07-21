@@ -418,6 +418,11 @@ class AddToBasketButton extends StatelessWidget {
       onTap: () {
         context.read<ProductBloc>().add(AddProductToBasket(products));
         context.read<BasketBloc>().add(GetInitBasketEvent());
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //   SnackBar(
+        //     content: Text('Product added to basket'),
+        //   ),
+        // );
       },
       child: Stack(
         alignment: AlignmentDirectional.bottomCenter,

@@ -10,6 +10,7 @@ import '../model/basket_item.dart';
 abstract class IbasketDatasource {
   Future<void> addBasket(BasketItem basketItem);
   Future<List<BasketItem>> getAllBasketItem();
+  Future<int> getBasketFinalPrice();
 }
 
 class BasketDatasource extends IbasketDatasource {
@@ -29,5 +30,16 @@ class BasketDatasource extends IbasketDatasource {
     } catch (ex) {
       throw ApiExeption('unknown error happend', 0);
     }
+  }
+
+  @override
+  Future<int> getBasketFinalPrice() async {
+    var list = box.values.toList();
+    int totalPrice = list.fold(
+      0,
+      (accumolate, basketItem) => accumolate + basketItem.price,
+    );
+
+    return totalPrice;
   }
 }

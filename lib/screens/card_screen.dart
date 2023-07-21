@@ -81,15 +81,11 @@ class _CardScreenState extends State<CardScreen> {
                   ],
                 ),
                 if (state is FetchDataBasketState) ...{
-                  state.getAllBasketItem.fold(
-                      (l) => SliverToBoxAdapter(
-                            child: Text(l),
-                          ), (basketItemList) {
-                    double ListBasket = basketItemList.fold(0,
-                        (double accumulator, BasketItem basketItem) {
-                      return accumulator + basketItem.price;
-                    });
-                    return Padding(
+                  state.showPrice.fold(
+                    (l) => SliverToBoxAdapter(
+                      child: Text(l),
+                    ),
+                    (totalPrice) => Padding(
                       padding: const EdgeInsets.only(
                           left: 44, right: 44, bottom: 20),
                       child: SizedBox(
@@ -106,12 +102,12 @@ class _CardScreenState extends State<CardScreen> {
                           ),
                           onPressed: () {},
                           child: Text(
-                            ListBasket.toString(),
+                            "تومان  ${totalPrice.toString()}",
                           ),
                         ),
                       ),
-                    );
-                  })
+                    ),
+                  )
                 }
               ],
             );

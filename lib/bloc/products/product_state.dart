@@ -16,5 +16,8 @@ class ProductDetailResponseState extends ProductState {
   Either<String, List<ProductVarient>> productVarient;
   Either<String, List<Properties>> getProductProperties;
   Either<String, Category> getCategoryProduct;
-  ProductDetailResponseState(this.getImageProduct, this.productVarient,this.getCategoryProduct,this.getProductProperties);
+  ProductDetailResponseState(this.getImageProduct, this.productVarient,
+      this.getCategoryProduct, this.getProductProperties);
 }
+
+
