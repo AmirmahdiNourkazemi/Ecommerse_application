@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hive/hive.dart';
 import 'package:mobile_shop/bloc/basket/basket_bloc.dart';
 import 'package:mobile_shop/bloc/products/product_bloc.dart';
 import 'package:mobile_shop/bloc/products/product_state.dart';
@@ -773,11 +772,12 @@ class _ColorVarientState extends State<ColorVarient> {
                       ? Border.all(
                           color: CustomColors.blueIndicator,
                           width: 3,
-                          strokeAlign: BorderSide.strokeAlignOutside)
+                          //strokeAlign: BorderSide.strokeAlignOutside,
+                        )
                       : Border.all(
                           color: Color(0xff858585),
                           width: 0.5,
-                          strokeAlign: BorderSide.strokeAlignOutside,
+                          // strokeAlign: BorderSide.strokeAlignOutside,
                         ),
                   color: Color(hexColor),
                   borderRadius: BorderRadius.all(
@@ -992,11 +992,12 @@ class _StorageVarientListState extends State<StorageVarientList> {
                           ? Border.all(
                               color: CustomColors.blueIndicator,
                               width: 3,
-                              strokeAlign: BorderSide.strokeAlignOutside)
+                              //strokeAlign: BorderSide.strokeAlignOutside
+                            )
                           : Border.all(
                               color: Color(0xff858585),
                               width: 0.5,
-                              strokeAlign: BorderSide.strokeAlignOutside,
+                              //strokeAlign: BorderSide.strokeAlignOutside,
                             ),
                       color: Colors.white,
                       borderRadius: BorderRadius.all(

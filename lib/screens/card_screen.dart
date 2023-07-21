@@ -1,7 +1,6 @@
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hive/hive.dart';
 import 'package:mobile_shop/bloc/basket/basket_bloc.dart';
 import 'package:mobile_shop/bloc/basket/basket_state.dart';
 import 'package:mobile_shop/cached_image.dart';
@@ -20,7 +19,6 @@ class CardScreen extends StatefulWidget {
 class _CardScreenState extends State<CardScreen> {
   @override
   Widget build(BuildContext context) {
-    var box = Hive.box<BasketItem>('BasketBox');
     return Scaffold(
       backgroundColor: CustomColors.backgroundScreenColor,
       body: SafeArea(
@@ -82,24 +80,39 @@ class _CardScreenState extends State<CardScreen> {
                     SliverPadding(padding: EdgeInsets.only(bottom: 100))
                   ],
                 ),
-                Padding(
-                  padding:
-                      const EdgeInsets.only(left: 44, right: 44, bottom: 20),
-                  child: SizedBox(
-                    height: 53,
-                    width: MediaQuery.of(context).size.width,
-                    child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          textStyle: TextStyle(fontSize: 18, fontFamily: 'sm'),
-                          backgroundColor: CustomColors.green,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
+                if (state is FetchDataBasketState) ...{
+                  state.getAllBasketItem.fold(
+                      (l) => SliverToBoxAdapter(
+                            child: Text(l),
+                          ), (basketItemList) {
+                    double ListBasket = basketItemList.fold(0,
+                        (double accumulator, BasketItem basketItem) {
+                      return accumulator + basketItem.price;
+                    });
+                    return Padding(
+                      padding: const EdgeInsets.only(
+                          left: 44, right: 44, bottom: 20),
+                      child: SizedBox(
+                        height: 53,
+                        width: MediaQuery.of(context).size.width,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            textStyle:
+                                TextStyle(fontSize: 18, fontFamily: 'sm'),
+                            backgroundColor: CustomColors.green,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                          ),
+                          onPressed: () {},
+                          child: Text(
+                            ListBasket.toString(),
                           ),
                         ),
-                        onPressed: () {},
-                        child: Text('ادامه فرایند خرید')),
-                  ),
-                )
+                      ),
+                    );
+                  })
+                }
               ],
             );
           },
@@ -139,7 +152,7 @@ class CardItem extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
-                          'ایفون ۱۳ پرومکس',
+                          _basketItem.name,
                           style: TextStyle(fontFamily: 'sb', fontSize: 16),
                         ),
                         SizedBox(
@@ -162,11 +175,11 @@ class CardItem extends StatelessWidget {
                                   Radius.circular(15),
                                 ),
                               ),
-                              child: const Padding(
-                                padding: EdgeInsets.symmetric(
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
                                     vertical: 2, horizontal: 6),
                                 child: Text(
-                                  '٪۳',
+                                  "${_basketItem.persent!.round().toString()}%",
                                   style: TextStyle(
                                       fontFamily: 'sb',
                                       fontSize: 12,
@@ -183,7 +196,7 @@ class CardItem extends StatelessWidget {
                             SizedBox(
                               width: 4,
                             ),
-                            Text('۴۹.۱۲۳.۱۲۳',
+                            Text(_basketItem.price.toString(),
                                 style:
                                     TextStyle(fontFamily: 'sm', fontSize: 12))
                           ],
@@ -266,7 +279,7 @@ class CardItem extends StatelessWidget {
                   width: 5,
                 ),
                 Text(
-                  '59.000.000',
+                  _basketItem.realPrice.toString(),
                   style: TextStyle(fontFamily: 'sb', fontSize: 16),
                 ),
               ],
@@ -311,9 +324,11 @@ class OptionCheap extends StatelessWidget {
                 ),
               )
             },
-            Text(title,
-                textDirection: TextDirection.rtl,
-                style: TextStyle(fontFamily: 'sm', fontSize: 12)),
+            Text(
+              title,
+              textDirection: TextDirection.rtl,
+              style: TextStyle(fontFamily: 'sm', fontSize: 12),
+            ),
           ],
         ),
       ),
